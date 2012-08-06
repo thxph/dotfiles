@@ -1,0 +1,25 @@
+
+startup_message off
+
+bind c screen 1
+
+defshell /bin/zsh
+
+vbell off
+
+escape `e
+
+hardstatus alwayslastline
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
+
+bindkey "^[[1;5C" next # change window with ctrl-right
+bindkey "^[[1;5D" prev # change window with ctrl-left
+
+screen -t main      1   /bin/zsh
+screen -t root      2   sudo -s
+screen -t vim       3   vim
+screen -t ruby      4   irb
+screen -t python    5   python
+screen -t shell1    6   /bin/zsh
+screen -t shell2    7   /bin/zsh
+screen -t shell3    8   /bin/zsh

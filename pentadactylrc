@@ -1,0 +1,13 @@
+"1.0b6 (created: 2011/03/09 09:25:18)
+
+loadplugins '\.(js|penta)$'
+group user
+map -modes=n <C-u> -builtin k
+map -modes=n j -builtin <C-d>
+map -modes=n k -builtin <C-u>
+map -modes=n <C-d> -ex dl
+set hlfind
+set runtimepath=/Users/tessa/.pentadactyl
+
+" vim: set ft=pentadactyl:
+
