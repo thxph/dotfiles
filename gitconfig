@@ -2,4 +2,4 @@
     name = Te[ss]a
     email = thanh.x.pham@me.com
 [core]
-	excludesfile = ~/.gitignore
+    excludesfile = ~/.gitignore
