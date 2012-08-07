@@ -7,6 +7,9 @@ here="$(cd "$here"; pwd)"
 for file in "$here"/*; do
     name="$(basename "$file")"
     if [[ !( " initialize.bash oh-my-zsh-custom readme.md " =~ " $name " ) ]]; then
+        if [[ -e "$HOME/.$name" ]]; then
+            rm -rv "$HOME/.$name"
+        fi
         ln -sfhv $file "$HOME/.$name"
     fi
 done
