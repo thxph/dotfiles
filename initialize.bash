@@ -4,6 +4,9 @@ set -e
 here="$(dirname "$0")"
 here="$(cd "$here"; pwd)"
 
+(cd $here; git submodule init)
+(cd $here; git submodule update)
+
 for file in "$here"/*; do
     name="$(basename "$file")"
     if [[ !( " initialize.bash oh-my-zsh-custom readme.md " =~ " $name " ) ]]; then
