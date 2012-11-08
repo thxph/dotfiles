@@ -325,7 +325,7 @@ function! LatexBox_TOC()
     nnoremap <silent> <buffer> <2-leftmouse> :call <SID>TOCActivate(1)<cr>
 	nnoremap <buffer> <silent> G	G4k
 
-	setlocal nomodifiable tabstop=8
+	setlocal nomodifiable tabstop=4
 
 	let b:toc = toc
 	let b:calling_win = bufwinnr(calling_buf)

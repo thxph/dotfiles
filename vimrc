@@ -32,7 +32,7 @@ set expandtab
 set autoindent
 autocmd FileType ruby set tabstop=2|set shiftwidth=2|set softtabstop=2
 
-set textwidth=0                 " Set textwidth
+set textwidth=72                 " Set textwidth
 
 " Folding settings
 set foldmethod=indent           " Fold based on indent
@@ -369,6 +369,7 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+"autocmd FileType tex setlocal omnifunc=texcomplete#CompleteTags
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
@@ -381,4 +382,13 @@ let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
 let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
 imap <expr> - pumvisible() ? "\<Plug>(neocomplcache_start_unite_quick_match)" : '-'
+
+let g:LatexBox_latexmk_options = '-pvc'
+let g:LatexBox_viewer = 'skim'
+
+
+setlocal formatoptions+=wa
+imap <buffer> [[ \begin{
+nmap <buffer> <f5> <plug>LatexChangeEnv
+vmap <buffer> <f7> <plug>LatexWrapSelection
 
