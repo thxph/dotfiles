@@ -8,6 +8,7 @@ map -modes=n k -builtin <C-u>
 map -modes=n <C-d> -ex dl
 set hlfind
 set runtimepath=/Users/tessa/.pentadactyl
+set showtabline=never
 
 " vim: set ft=pentadactyl:
 
