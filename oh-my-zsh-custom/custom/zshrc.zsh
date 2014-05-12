@@ -111,16 +111,21 @@ find $HOME/.vimbackup -name "*" -type f -mtime +90 -exec rm -f {} \;
 typeset -U cdpath
 cdpath=( . $cdpath ~ /Volumes/Haru/Users/tessa ~/Dropbox/synchronized ~/wip ~/src / )
 
+if [[ -d $HOME/Dropbox/Public/ss ]]; then
+    find $HOME/Dropbox/Public/ss \
+        -name "*" -type f -mtime +10 -exec rm -f {} \;
+fi
+
+if [[ -d $HOME/Dropbox/Public/temp ]]; then
+    find $HOME/Dropbox/Public/temp \
+    -name "*" -type f -mtime +10 -exec rm -r {} \;
+fi
+
 # aliases for OS X system
 if uname | grep Darwin >> /dev/null; then
     alias port='sudo port'
     alias sha512sum='gsha512sum'
 
-    # cleaning dropbox's screenshot
-    find $HOME/Dropbox/Public/ss \
-        -name "*" -type f -mtime +10 -exec rm -f {} \;
-    find $HOME/Dropbox/Public/temp \
-    -name "*" -type f -mtime +10 -exec rm -r {} \;
     manpath=(/opt/local/man /usr/local/man $manpath)
     cdpath=($cdpath ~/Documents)
 fi
