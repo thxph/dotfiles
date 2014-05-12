@@ -1,0 +1,51 @@
+{
+    "default_module": "powerline.segments.common",
+    "segment_data": {
+        "uptime": {
+            "before": "⇑"
+        }
+    },
+    "segments": {
+        "left": [
+        {
+            "name": "external_ip",
+            "priority": 50,
+            "width" : 15,
+            "align" : "c"
+        },
+        {
+            "name": "hostname"
+        }
+        ],
+        "right": [
+        {
+            "name": "uptime",
+            "priority": 50
+        },
+        {
+            "name": "system_load",
+            "priority": 50
+        },
+        {
+            "name": "date",
+            "args": {
+                "format": "%a",
+                "istime": true
+            }
+        },
+        {
+            "name": "date",
+            "args": {
+                "istime": true
+            }
+        },
+        {
+            "name": "date",
+            "args": {
+                "format": "%H:%M",
+                "istime": true
+            }
+        }
+        ]
+    }
+}
