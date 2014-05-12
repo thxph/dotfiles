@@ -14,6 +14,14 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My Bundles here:
+NeoBundle 'Shougo/vimproc', {
+            \ 'build' : {
+            \     'windows' : 'make -f make_mingw32.mak',
+            \     'cygwin' : 'make -f make_cygwin.mak',
+            \     'mac' : 'make -f make_mac.mak',
+            \     'unix' : 'make -f make_unix.mak',
+            \    },
+            \ }
 NeoBundle 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'tpope/vim-fugitive'
@@ -23,6 +31,13 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'tomasr/molokai'
+NeoBundle 'davidhalter/jedi-vim'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'taq/vim-git-branch-info'
+NeoBundle 'Raimondi/delimitMate'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'bling/vim-airline'
 
 call neobundle#end()
 
@@ -89,9 +104,9 @@ set sidescroll=1
 
 " Turn on syntax highlighting
 syntax on
-"set t_Co=8
+set t_Co=256
 set background=dark
-"colorscheme github
+colorscheme Tomorrow-Night-Eighties
 
 set mouse=a                     " Enable mouse
 set ttymouse=xterm2             " Enable mouse even in screen
@@ -192,232 +207,242 @@ endif
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
-"" ==============================================================================
-"" Statusline
+if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+endif
+
+autocmd FileType python setlocal omnifunc=jedi#completions
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+let g:neocomplete#force_omni_input_patterns.python =
+            \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+
+" ==============================================================================
+" Statusline
 
 
-"set statusline=%f               " Filename
+set statusline=%f               " Filename
 
-""   Display a warning if fileformat isn't unix
-"set statusline+=%#warningmsg#
-"set statusline+=%{&ff!='unix'?'['.&ff.']':''}
-"set statusline+=%*
+"   Display a warning if fileformat isn't unix
+set statusline+=%#warningmsg#
+set statusline+=%{&ff!='unix'?'['.&ff.']':''}
+set statusline+=%*
 
-""   Display a warning if file encoding isn't utf-8
-"set statusline+=%#warningmsg#
-"set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
-"set statusline+=%*
+"   Display a warning if file encoding isn't utf-8
+set statusline+=%#warningmsg#
+set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
+set statusline+=%*
 
-"set statusline+=%h              " Help file flag
-"set statusline+=%y              " Filetype
-"set statusline+=%r              " Read-only flag
-"set statusline+=%m              " Modified flag
+set statusline+=%h              " Help file flag
+set statusline+=%y              " Filetype
+set statusline+=%r              " Read-only flag
+set statusline+=%m              " Modified flag
 
-"" Display an error if &et is wrong, or we've mixed-indenting
-"set statusline+=%#error#
-"set statusline+=%{StatuslineTabWarning()}
-"set statusline+=%*
+" Display an error if &et is wrong, or we've mixed-indenting
+set statusline+=%#error#
+set statusline+=%{StatuslineTabWarning()}
+set statusline+=%*
 
-"set statusline+=%{StatuslineTrailingSpaceWarning()}
+set statusline+=%{StatuslineTrailingSpaceWarning()}
 
-"set statusline+=%{StatuslineLongLineWarning()}
+set statusline+=%{StatuslineLongLineWarning()}
 
-"set statusline+=%#warningmsg#
-""set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
+set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
-"" Display an error if &paste is set
-"set statusline+=%#error#
-"set statusline+=%{&paste?'[paste]':''}
-"set statusline+=%*
+" Display an error if &paste is set
+set statusline+=%#error#
+set statusline+=%{&paste?'[paste]':''}
+set statusline+=%*
 
-"set statusline+=%=              " Left/right seperator
-"set statusline+=%{GitBranchInfoString()}          " Git branch info
-"set statusline+=%{StatuslineCurrentHighlight()} " Current highlight
-"set statusline+=%c,             " Cursor column
-"set statusline+=%l/%L           " Cursor line/total lines
-"set statusline+=\ %P            " Percent through file
+set statusline+=%=              " Left/right seperator
+set statusline+=%{GitBranchInfoString()}          " Git branch info
+set statusline+=%{StatuslineCurrentHighlight()} " Current highlight
+set statusline+=%c,             " Cursor column
+set statusline+=%l/%L           " Cursor line/total lines
+set statusline+=\ %P            " Percent through file
 
-"set laststatus=2                " Display status line in all file
+set laststatus=2                " Display status line in all file
 
-"" ==============================================================================
-"" Functions ...
+" ==============================================================================
+" Functions ...
 
-"" Jump to last cursor pos when opening a file
-"" don't do it when writing a commit log entry
-"function! SetCursorPosition()
-  "if &filetype !~ 'commit\c'
-    "if line("'\"") > 0 && line("'\"") <= line("$")
-      "exe "normal! g`\""
-      "normal! zz
-    "endif
-  "endif
-"endfunction
+" Jump to last cursor pos when opening a file
+" don't do it when writing a commit log entry
+function! SetCursorPosition()
+  if &filetype !~ 'commit\c'
+    if line("'\"") > 0 && line("'\"") <= line("$")
+      exe "normal! g`\""
+      normal! zz
+    endif
+  endif
+endfunction
 
-"" Define :HighlightLongLines cmd to highlight the offending parts of
-"" lines that are longer than the specified length (default to 80)
-"command! -nargs=? HighlightLongLines call s:HighlightLongLines('<args>')
-"function! s:HighlightLongLines(width)
-  "let targetWidth = a:width != '' ? a:width : 81
-  "if targetWidth > 0
-    "exec 'match Todo /\%>' . (targetWidth) . 'v/'
-  "else
-    "echomsg "Usage: HighlightLongLines [natural number]"
-  "endif
-"endfunction
+" Define :HighlightLongLines cmd to highlight the offending parts of
+" lines that are longer than the specified length (default to 80)
+command! -nargs=? HighlightLongLines call s:HighlightLongLines('<args>')
+function! s:HighlightLongLines(width)
+  let targetWidth = a:width != '' ? a:width : 81
+  if targetWidth > 0
+    exec 'match Todo /\%>' . (targetWidth) . 'v/'
+  else
+    echomsg "Usage: HighlightLongLines [natural number]"
+  endif
+endfunction
 
-"" Return '[\s]' if trailing white space is detected
-"" return '' otherwise
-"function! StatuslineTrailingSpaceWarning()
-  "if !exists("b:statusline_trailing_space_warning")
-    "if search('\s\+$', 'nw') != 0
-      "let b:statusline_trailing_space_warning = '[\s]'
-    "else
-      "let b:statusline_trailing_space_warning = ''
-    "endif
-  "endif
-  "return b:statusline_trailing_space_warning
-"endfunction
+" Return '[\s]' if trailing white space is detected
+" return '' otherwise
+function! StatuslineTrailingSpaceWarning()
+  if !exists("b:statusline_trailing_space_warning")
+    if search('\s\+$', 'nw') != 0
+      let b:statusline_trailing_space_warning = '[\s]'
+    else
+      let b:statusline_trailing_space_warning = ''
+    endif
+  endif
+  return b:statusline_trailing_space_warning
+endfunction
 
-"" Return syntax highlight group under the cursor ''
-"function! StatuslineCurrentHighlight()
-  "let name = synIDattr(synID(line('.'),col('.'),1),'name')
-  "if name == ''
-    "return ''
-  "else
-    "return '[' . name . '] '
-  "endif
-"endfunction
+" Return syntax highlight group under the cursor ''
+function! StatuslineCurrentHighlight()
+  let name = synIDattr(synID(line('.'),col('.'),1),'name')
+  if name == ''
+    return ''
+  else
+    return '[' . name . '] '
+  endif
+endfunction
 
-"" Return '[&et]' if &et is set wrong
-"" return '[mixed-indenting]' if spaces and tabs are used to indent
-"" return an empty string if everything is fine
-"function! StatuslineTabWarning()
-  "if !exists("b:statusline_tab_warning")
-    "let ntabs = search('^\t', 'nw') != 0
-    "let nspaces = search('^ ', 'nw') != 0
+" Return '[&et]' if &et is set wrong
+" return '[mixed-indenting]' if spaces and tabs are used to indent
+" return an empty string if everything is fine
+function! StatuslineTabWarning()
+  if !exists("b:statusline_tab_warning")
+    let ntabs = search('^\t', 'nw') != 0
+    let nspaces = search('^ ', 'nw') != 0
 
-    "if ntabs && nspaces
-      "let b:statusline_tab_warning = '[mixed-indenting]'
-    "elseif (nspaces && !&et) || (ntabs && &et)
-      "let b:statusline_tab_warning = '[&et]'
-    "else
-      "let b:statusline_tab_warning = ''
-    "endif
-  "endif
-  "return b:statusline_tab_warning
-"endfunction
+    if ntabs && nspaces
+      let b:statusline_tab_warning = '[mixed-indenting]'
+    elseif (nspaces && !&et) || (ntabs && &et)
+      let b:statusline_tab_warning = '[&et]'
+    else
+      let b:statusline_tab_warning = ''
+    endif
+  endif
+  return b:statusline_tab_warning
+endfunction
 
-"" Return a warning for "long lines" where "long" is either &textwidth or 80
-"" (if no &textwidth is set)
-""
-"" return '' if no long lines
-"" return '[#x,my,$z]' if long lines are found, where x is the number of long
-"" lines, y is the median length of the long lines and z is the length of the
-"" longest line
-"function! StatuslineLongLineWarning()
-  "if !exists("b:statusline_long_line_warning")
-    "let long_line_lens = s:LongLines()
+" Return a warning for "long lines" where "long" is either &textwidth or 80
+" (if no &textwidth is set)
+"
+" return '' if no long lines
+" return '[#x,my,$z]' if long lines are found, where x is the number of long
+" lines, y is the median length of the long lines and z is the length of the
+" longest line
+function! StatuslineLongLineWarning()
+  if !exists("b:statusline_long_line_warning")
+    let long_line_lens = s:LongLines()
 
-    "if len(long_line_lens) > 0
-      "let b:statusline_long_line_warning = "[" .
-        "\ '#' . len(long_line_lens) . "," .
-        "\ 'm' . s:Median(long_line_lens) . "," .
-        "\ '$' . max(long_line_lens) . "]"
-    "else
-      "let b:statusline_long_line_warning = ""
-    "endif
-  "endif
-  "return b:statusline_long_line_warning
-"endfunction
+    if len(long_line_lens) > 0
+      let b:statusline_long_line_warning = "[" .
+        \ '#' . len(long_line_lens) . "," .
+        \ 'm' . s:Median(long_line_lens) . "," .
+        \ '$' . max(long_line_lens) . "]"
+    else
+      let b:statusline_long_line_warning = ""
+    endif
+  endif
+  return b:statusline_long_line_warning
+endfunction
 
-"" Return a list containing the length of the long lines in this buffer
-"function! s:LongLines()
-  "let threshold = (&tw ? &tw : 80)
-  "let spaces = repeat(" ", &ts)
+" Return a list containing the length of the long lines in this buffer
+function! s:LongLines()
+  let threshold = (&tw ? &tw : 80)
+  let spaces = repeat(" ", &ts)
 
-  "let long_line_lens = []
+  let long_line_lens = []
 
-  "let i = 1
-  "while i <= line("$")
-    "let len = strlen(substitute(getline(i), '\t', spaces, 'g'))
-    "if len > threshold
-      "call add(long_line_lens, len)
-    "endif
-    "let i += 1
-  "endwhile
+  let i = 1
+  while i <= line("$")
+    let len = strlen(substitute(getline(i), '\t', spaces, 'g'))
+    if len > threshold
+      call add(long_line_lens, len)
+    endif
+    let i += 1
+  endwhile
 
-  "return long_line_lens
-"endfunction
+  return long_line_lens
+endfunction
 
-"" Find the median of the given array of numbers
-"function! s:Median(nums)
-  "let nums = sort(a:nums)
-  "let l = len(nums)
+" Find the median of the given array of numbers
+function! s:Median(nums)
+  let nums = sort(a:nums)
+  let l = len(nums)
 
-  "if l % 2 == 1
-    "let i = (l-1) / 2
-    "return nums[i]
-  "else
-    "return (nums[l/2] + nums[(l/2)-1]) / 2
-  "endif
-"endfunction
+  if l % 2 == 1
+    let i = (l-1) / 2
+    return nums[i]
+  else
+    return (nums[l/2] + nums[(l/2)-1]) / 2
+  endif
+endfunction
 
-"" Visual search function
-"function! s:VSetSearch()
-  "let temp = @@
-  "norm! gvy
-  "let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  "let @@ = temp
-"endfunction
+" Visual search function
+function! s:VSetSearch()
+  let temp = @@
+  norm! gvy
+  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+  let @@ = temp
+endfunction
 
-"" ==============================================================================
-"" Autocmd
+" ==============================================================================
+" Autocmd
 
-"" Recalculate the long line warning when idle and after saving
-"autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
+" Recalculate the long line warning when idle and after saving
+autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
 
-"" Recalculate the tab warning flag when idle and after saving
-"autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
+" Recalculate the tab warning flag when idle and after saving
+autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
 
-"" Jump to last cursor pos when opening a file
-"autocmd BufReadPost * call SetCursorPosition()
+" Jump to last cursor pos when opening a file
+autocmd BufReadPost * call SetCursorPosition()
 
-"" Recalculate trailing whitespace warning when idle, and after saving
-"autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
+" Recalculate trailing whitespace warning when idle, and after saving
+autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 
-"" ==============================================================================
-"" Global Variables Settings
+" ==============================================================================
+" Global Variables Settings
 
-"" Mark syntax errors with :signs
-"let g:syntastic_enable_signs=1
+" Mark syntax errors with :signs
+let g:syntastic_enable_signs=1
 
-"" Git branch info settings
-"let g:git_branch_status_head_current = 1    " just show current head branch name
-"let g:git_branch_status_text = ""           " text be4 branch
-"let g:git_branch_status_nogit = "[-na-]"    " message when there's no git repos
-"let g:git_branch_status_around = "[]"       " puts [] around str
-"let g:git_branch_status_ignore_remotes = 1  " ignore remote branches
+" Git branch info settings
+let g:git_branch_status_head_current = 1    " just show current head branch name
+let g:git_branch_status_text = ""           " text be4 branch
+let g:git_branch_status_nogit = "[-na-]"    " message when there's no git repos
+let g:git_branch_status_around = "[]"       " puts [] around str
+let g:git_branch_status_ignore_remotes = 1  " ignore remote branches
 
 "" Map leader to \
 "let mapleader = "\\"
 
-"" ==============================================================================
-"" Mapping settings
+" ==============================================================================
+" Mapping settings
 
-"" Map ^L to :noh
-"nnoremap <C-L> :nohls<CR>
-"inoremap <C-L> <C-O>:nohls<CR>
+" Map ^L to :noh
+nnoremap <C-L> :nohls<CR>
+inoremap <C-L> <C-O>:nohls<CR>
 
-"" Map Q to sth useful
-"nnoremap Q gq
+" Map Q to sth useful
+nnoremap Q gq
 
-"" Make Y consistent with C and D
-"nnoremap Y y$
+" Make Y consistent with C and D
+nnoremap Y y$
 
-"" Map * and # to search selected text
-"vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
-"vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+" Map * and # to search selected text
+vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
+vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 "imap <Leader>q <C-j>
 
@@ -440,3 +465,8 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 "imap <expr> - pumvisible() ? "\<Plug>(neocomplcache_start_unite_quick_match)" : '-'
 
+"python from powerline.vim import setup as powerline_setup
+"python powerline_setup()
+"python del powerline_setup
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
