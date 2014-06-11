@@ -19,6 +19,8 @@ setopt NO_auto_pushd
 # expand dot files
 setopt dotglob
 
+export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
+
 # for OS X
 if uname | grep Darwin >> /dev/null; then
     # env for stuff installed by macports
