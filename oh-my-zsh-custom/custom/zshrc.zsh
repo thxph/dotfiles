@@ -81,7 +81,9 @@ setopt NO_xtrace
 
 # bindkey
 bindkey '' backward-delete-char
-#bindkey '' history-incremental-search-backward
+bindkey '^h' backward-delete-char
+bindkey '^w' backward-kill-word
+bindkey '^r' history-incremental-search-backward
 
 
 # loading aliases
@@ -131,9 +133,7 @@ if uname | grep Darwin >> /dev/null; then
 
 fi
 
-#zstyle -s ':completion:*:hosts' hosts _ssh_config
-#[[ -r ~/.ssh/config ]] && _ssh_config+=($(cat ~/.ssh/config | sed -ne 's/Host[=\t ]//p'))
-#zstyle ':completion:*:hosts' hosts $_ssh_config
-
 #. /Users/pxt/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
+
+
 
