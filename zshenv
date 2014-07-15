@@ -1,7 +1,12 @@
 #!/usr/bin/env zsh
 
 if [[ -d /opt/ruby-enterprise ]]; then
-  path=( /opt/ruby-enterprise/bin $path )
+    path=( /opt/ruby-enterprise/bin $path )
+fi
+
+if [[ -d $HOME/.jenv/bin ]]; then
+    path=( $HOME/.jenv/bin $path )
+    eval "$(jenv init -)"
 fi
 
 typeset -U manpath
@@ -19,7 +24,6 @@ setopt NO_auto_pushd
 # expand dot files
 setopt dotglob
 
-export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
 
 # for OS X
 if uname | grep Darwin >> /dev/null; then
@@ -31,6 +35,7 @@ if uname | grep Darwin >> /dev/null; then
     cdpath=($cdpath ~/Documents)
 elif uname | grep Linux >> /dev/null; then
     export XDG_CONFIG_HOME="$HOME/.config"
+    export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
 fi
 
 path=( $path ~/.local/bin . )

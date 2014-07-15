@@ -128,6 +128,7 @@ if uname | grep Darwin >> /dev/null; then
 
     manpath=(/opt/local/man /usr/local/man $manpath)
     cdpath=($cdpath ~/Documents)
+
 fi
 
 #. /Users/pxt/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
