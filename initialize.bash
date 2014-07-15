@@ -14,6 +14,9 @@ for file in "$here"/*; do
         if [[ -e "$HOME/.$name" ]]; then
             rm -rv "$HOME/.$name"
         fi
+        if [[ -d "$HOME/.vimbackup"]]; then
+            mkdir "$HOME/.vimbackup"
+        fi
         if [[ `uname` == 'Linux' ]]; then
             ln -sfv $file "$HOME/.$name"
         elif [[ `uname` == 'Darwin' ]]; then
