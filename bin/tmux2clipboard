@@ -3,6 +3,6 @@
 if uname | grep Darwin >> /dev/null; then
     reattach-to-user-namespace pbcopy
 elif uname | grep Linux >> /dev/null; then
-    xclip -selection clipboard >/dev/null
+    xclip -in -selection clipboard >> /dev/null
 fi
 
