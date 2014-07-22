@@ -30,7 +30,7 @@ if uname | grep Darwin >> /dev/null; then
     # env for stuff installed by macports
     export TERMINFO=/opt/local/share/terminfo
     path=( /usr/texbin /opt/local/sbin/ /opt/local/bin $path ~/Library/Python/2.7/bin
-        /opt/local/lib/postgresql83/bin/ ~/bin )
+    /opt/local/lib/postgresql83/bin/ )
     manpath=(/opt/local/man /usr/local/man $manpath)
     cdpath=($cdpath ~/Documents)
 elif uname | grep Linux >> /dev/null; then
@@ -38,7 +38,7 @@ elif uname | grep Linux >> /dev/null; then
     export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
 fi
 
-path=( $path ~/.local/bin . )
+path=( $path ~/.local/bin . ~/bin )
 
 typeset -U path
 
