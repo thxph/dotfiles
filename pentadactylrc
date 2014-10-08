@@ -1,13 +1,12 @@
-"hg7092
+"hg7127
 
 loadplugins '\.(js|penta)$'
-group user
 map -count -modes=n <C-u> -builtin <count>k
 map -count -modes=n j -builtin <count><C-d>
 map -count -modes=n k -builtin <count><C-u>
 map -modes=n <C-d> -ex dl
 set hlfind
-set runtimepath=/Users/tessa/.pentadactyl
+group user
 set showtabline=never
 
 " vim: set ft=pentadactyl:
