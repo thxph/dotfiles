@@ -7,6 +7,7 @@ fi
 if [[ -d $HOME/.jenv/bin ]]; then
     path=( $HOME/.jenv/bin $path )
     eval "$(jenv init -)"
+    export JAVA_HOME=$(jenv javahome)
 fi
 
 typeset -U manpath
@@ -35,7 +36,6 @@ if uname | grep Darwin >> /dev/null; then
     cdpath=($cdpath ~/Documents)
 elif uname | grep Linux >> /dev/null; then
     export XDG_CONFIG_HOME="$HOME/.config"
-    export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
 fi
 
 path=( $path ~/.local/bin . ~/bin )
