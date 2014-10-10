@@ -82,3 +82,23 @@ if [[ ! -d "$HOME/.vimbackup" ]]; then
     mkdir "$HOME/.vimbackup"
 fi
 
+if [[ ! -d "$HOME/.fonts" ]]; then
+    echo "Creating ~/.fonts"
+    mkdir "$HOME/.fonts"
+fi
+
+if grep -c debian /etc/*release* > /dev/null; then
+    echo 'Installing stuff ...'
+    sudo apt-get install aptitude
+    sudo aptitude install python-pip tmux git zsh
+    echo 'Installing powerline'
+    pip install --user git+git://github.com/Lokaltog/powerline
+    find $HOME -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
+    echo 'Installing powerline-patched-font'
+    git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
+    find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
+    rm -rfv $HOME/powerline-font-82374846
+    fc-cache -vf $HOME/.fonts/
+    chsh -s `which zsh`
+fi
+
