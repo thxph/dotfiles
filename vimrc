@@ -469,3 +469,10 @@ vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 "python del powerline_setup
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+
+
+au FileType python map <leader>\ :!python % 
+au FileType ruby map <leader>\ :!ruby % 
+
+vnoremap <leader>] :!xclip -in -selection clipboard && xclip -out -selection clipboard<CR>
+nnoremap <leader>[ :r!xclip -out -selection clipboard<CR>

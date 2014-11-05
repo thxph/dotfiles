@@ -10,6 +10,14 @@ if [[ -d $HOME/.jenv/bin ]]; then
     export JAVA_HOME=$(jenv javahome)
 fi
 
+if [[ -d /opt/maven/current ]]; then
+    path=( /opt/maven/current/bin $path )
+    export M2_HOME=/opt/maven/current
+fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
 typeset -U manpath
 manpath=( $manpath )
 
