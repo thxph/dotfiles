@@ -43,11 +43,11 @@ chkln () {
     done
 }
 
-echo "Conflicting dotfiles in $HOME:"
+printf "\033[1;31;49m=== Conflicting dotfiles in $HOME:\n\033[0m"
 mkln '' f
 mkln 'config/' f
 chkln 'bin/'
-echo -n "Type Y/y to overwrite those files: "
+printf "\033[1;32;49m=== Type Y/y to overwrite those files: \033[0m"
 read -n 1 c
 echo ''
 if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
@@ -87,18 +87,40 @@ if [[ ! -d "$HOME/.fonts" ]]; then
     mkdir "$HOME/.fonts"
 fi
 
-if grep -c debian /etc/*release* > /dev/null; then
-    echo 'Installing stuff ...'
-    sudo apt-get install aptitude
-    sudo aptitude install python-pip tmux git zsh
-    echo 'Installing powerline'
-    pip install --user git+git://github.com/Lokaltog/powerline
-    find $HOME -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
-    echo 'Installing powerline-patched-font'
-    git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
-    find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
-    rm -rfv $HOME/powerline-font-82374846
-    fc-cache -vf $HOME/.fonts/
-    chsh -s `which zsh`
+printf "\033[1;32;49m=== Type Y/y to install zsh, tmux, python and powerline: \033[0m"
+read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+    if uname -a | grep -iq linux > /dev/null && grep -iq debian /etc/*release* > /dev/null; then
+        echo 'Installing stuff ...'
+        sudo apt-get install aptitude
+        sudo aptitude install python-pip tmux git zsh
+        echo 'Installing powerline'
+        pip install --user git+git://github.com/powerline/powerline
+        find $HOME -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
+        echo 'Installing powerline-patched-font'
+        git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
+        find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
+        rm -rfv $HOME/powerline-font-82374846
+        fc-cache -vf $HOME/.fonts/
+        chsh -s `which zsh`
+    elif uname -a | grep -iq darwin > /dev/null; then
+        if [ -f /usr/local/bin/brew ]; then
+            brew install python curl wget python3 tmux zsh git
+            pip3 install git+git://github.com/powerline/powerline
+            pip3 install psutil
+            if grep -iq '/usr/local/bin/zsh' /etc/shells; then
+
+                printf "    \033[1;34;49m /usr/local/bin/zsh is already in /etc/shells\033[0m\n"
+            else
+                printf "    \033[1;34;49m Adding homebrew's zsh to /etc/shells\n\033[0m"
+                sudo sh -c 'echo "/usr/local/bin/zsh" >> /etc/shells'
+            fi
+            find /usr/local -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
+        fi
+    fi
 fi
+
+printf "\033[1;31;49m==================================\033[1;4;37;49mIMPORTANT!!!\033[0m\033[1;31;49m=======================================\n"
+printf "===\033[1;39;49m   Use System settings panel to change you default shell to /usr/local/bin/zsh \033[1;31;49m===\n"
+printf "===\033[1;39;49m and change your terminal font to something that support powerline \033[1;31;49m            ===\n"
+printf "\033[1;31;49m=====================================================================================\n"
 
