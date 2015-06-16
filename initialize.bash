@@ -104,7 +104,7 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
         chsh -s `which zsh`
     elif uname -a | grep -iq darwin > /dev/null; then
         if [ -f /usr/local/bin/brew ]; then
-            brew install python curl wget python3 tmux zsh git
+            brew install python curl wget python3 tmux zsh git reattach-to-user-namespace
             pip3 install git+git://github.com/powerline/powerline
             pip3 install psutil
             if grep -iq '/usr/local/bin/zsh' /etc/shells; then
