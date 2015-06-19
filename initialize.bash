@@ -96,11 +96,13 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
         echo 'Installing powerline'
         pip install --user git+git://github.com/powerline/powerline
         find $HOME -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
-        echo 'Installing powerline-patched-font'
-        git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
-        find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
-        rm -rfv $HOME/powerline-font-82374846
-        fc-cache -vf $HOME/.fonts/
+        if which fc-cache; then
+            echo 'Installing powerline-patched-font'
+            git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
+            find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
+            rm -rfv $HOME/powerline-font-82374846
+            fc-cache -vf $HOME/.fonts/
+        fi
         chsh -s `which zsh`
     elif uname -a | grep -iq darwin > /dev/null; then
         if [ -f /usr/local/bin/brew ]; then
