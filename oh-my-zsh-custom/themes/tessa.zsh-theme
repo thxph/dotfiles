@@ -34,3 +34,12 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 #local return_status="%{$fg[red]%}%(?..⏎)%{$reset_color%}"
 #RPROMPT='${return_status}%{$reset_color%}'
+
+
+RPROMPT='%D{%H:%M:%S}'
+
+TMOUT=1
+
+TRAPALRM() {
+    zle reset-prompt
+}
