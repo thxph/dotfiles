@@ -38,8 +38,5 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 RPROMPT='%D{%H:%M:%S}'
 
-TMOUT=1
+#TMOUT=1
 
-TRAPALRM() {
-    zle reset-prompt
-}
