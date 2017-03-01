@@ -121,8 +121,8 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
     fi
 fi
 
-printf "\033[1;31;49m==================================\033[1;4;37;49mIMPORTANT!!!\033[0m\033[1;31;49m=======================================\n"
-printf "===\033[1;39;49m   Use System settings panel to change you default shell to /usr/local/bin/zsh \033[1;31;49m===\n"
-printf "===\033[1;39;49m and change your terminal font to something that support powerline \033[1;31;49m            ===\n"
-printf "\033[1;31;49m=====================================================================================\n"
+mkdir -p ~/.cache/dein
+curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > /tmp/installer.sh
+sh /tmp/installer.sh ~/.cache/dein
+
 
