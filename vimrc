@@ -43,6 +43,15 @@ if dein#load_state(deinpath)
   call dein#add('AndrewRadev/splitjoin.vim')
   call dein#add('SirVer/ultisnips')
 
+  if has('nvim')
+      call dein#add('Shougo/deoplete.nvim')
+      call dein#add('Shougo/neopairs.vim')
+      call dein#add('Shougo/neoinclude.vim')
+      call dein#add('zchee/deoplete-go', {'build': 'make'})
+  else
+  endif
+  
+
   " Required:
   call dein#end()
   call dein#save_state()
@@ -67,7 +76,11 @@ set backspace=indent,eol,start  " Allow backspacing over everything
 set history=1000                " Store 1000 :cmdline history
 
 set showcmd                     " Show imcomplete cmds down the bottom
-set showmode                    " Show current mode at the bottom
+set noshowmode                    " Show current mode at the bottom
+
+if has("patch-7.4.314")
+    set shortmess+=c
+endif
 
 set incsearch                   " Incremental searching
 set hlsearch                    " Highlight searches by default
@@ -429,5 +442,33 @@ autocmd FileType go nmap <Leader>i <Plug>(go-info)
 let g:go_auto_type_info = 1
 let g:go_auto_sameids = 1
 
+let g:UltiSnipsExpandTrigger="<S-Tab>"
+
+if has('nvim')
+    set completeopt+=noselect
+
+    " Path to python interpreter for neovim
+    let g:python3_host_prog  = '/usr/bin/python3'
+    " Skip the check of neovim module
+    let g:python3_host_skip_check = 1
+
+    " Run deoplete.nvim automatically
+    let g:deoplete#enable_at_startup = 1
+    " deoplete-go settings
+    "let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+    let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+
+    call deoplete#custom#set('_', 'converters', ['converter_auto_paren']) 
+
+    inoremap <silent><expr> <TAB>
+		\ pumvisible() ? "\<C-n>" :
+		\ <SID>check_back_space() ? "\<TAB>" :
+		\ deoplete#mappings#manual_complete()
+
+    " Close the documentation window when completion is done
+    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+
+endif
 
 

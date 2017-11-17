@@ -27,7 +27,9 @@ export VISUAL=/usr/bin/vim
 export CLICOLOR=1
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export TERM=xterm-256color
+if [[ $TERM != *(256color) ]]; then
+    export TERM=xterm-256color
+fi
 
 # unset pushdignoredups & autopushd so zsh scripts behave normally
 setopt NO_pushd_ignore_dups
