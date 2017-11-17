@@ -5,15 +5,23 @@ if &compatible
 endif
 
 " Required:
-set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+
+if has('nvim')
+    let deinpath = '~/.cache/ndein'
+else
+    let deinpath = '~/.cache/dein'
+endif
+
+
+execute "set runtimepath+=".deinpath."/repos/github.com/Shougo/dein.vim"
 
 " Required:
-if dein#load_state('~/.cache/dein')
-  call dein#begin('~/.cache/dein')
+if dein#load_state(deinpath)
+  call dein#begin(deinpath)
 
   " Let dein manage dein
   " Required:
-  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+  call dein#add(deinpath.'/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
   "call dein#add('Shougo/neosnippet.vim')
@@ -23,11 +31,17 @@ if dein#load_state('~/.cache/dein')
   call dein#add('scrooloose/nerdcommenter')
   call dein#add('scrooloose/syntastic')
   call dein#add('tpope/vim-fugitive')
-  call dein#add('davidhalter/jedi-vim')
+  "call dein#add('davidhalter/jedi-vim')
   call dein#add('tpope/vim-surround')
   call dein#add('Raimondi/delimitMate')
   call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
   call dein#add('bling/vim-airline')
+  call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
+  call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+  call dein#add('fatih/vim-go')
+  call dein#add('fatih/molokai')
+  call dein#add('AndrewRadev/splitjoin.vim')
+  call dein#add('SirVer/ultisnips')
 
   " Required:
   call dein#end()
@@ -44,11 +58,6 @@ if dein#check_install()
 endif
 
 "End dein Scripts-------------------------
-
-" My Bundles here:
-"NeoBundle 'Shougo/neocomplete.vim'
-"NeoBundle 'tomasr/molokai'
-"NeoBundle 'Shougo/unite.vim'
 
 " ==============================================================================
 " Settings
@@ -89,7 +98,7 @@ set foldnestmax=7               " Deepest fold is 7 level
 set nofoldenable                " Don't fold by default
 
 " Wildmode settings
-set wildmode=list:longest       " Make cmdline tab completion similar to bash
+set wildmode=list:longest,full       " Make cmdline tab completion similar to bash
 set wildmenu                    " Make ^n & ^p to scroll through matches
 set wildignore=*.o,*.obj,*~     " Stuff to ignore when tab completing
 
@@ -108,17 +117,21 @@ set sidescroll=1
 syntax on
 set t_Co=256
 set background=dark
-colorscheme Tomorrow-Night-Eighties
+let g:rehash256 = 1
+let g:molokai_original = 1
+colorscheme molokai
 
 set mouse=a                     " Enable mouse
-set ttymouse=xterm2             " Enable mouse even in screen
+
+if !has('nvim')
+    set ttymouse=xterm2             " Enable mouse even in screen
+    set viminfo=%,'50,\"100,:100,n~/.viminfo
+endif
 
 set hidden                      " Allow vim to hide modified buffers
 
 set ignorecase                  " Ignore case searching
 set smartcase                   " Only ignore case when all text is lowercase
-
-set viminfo=%,'50,\"100,:100,n~/.viminfo
 
 set grepprg=grep\ -nH\ $*
 
@@ -153,7 +166,7 @@ set statusline+=%{StatuslineTrailingSpaceWarning()}
 set statusline+=%{StatuslineLongLineWarning()}
 
 set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 " Display an error if &paste is set
@@ -162,7 +175,7 @@ set statusline+=%{&paste?'[paste]':''}
 set statusline+=%*
 
 set statusline+=%=              " Left/right seperator
-set statusline+=%{GitBranchInfoString()}          " Git branch info
+"set statusline+=%{GitBranchInfoString()}          " Git branch info
 set statusline+=%{StatuslineCurrentHighlight()} " Current highlight
 set statusline+=%c,             " Cursor column
 set statusline+=%l/%L           " Cursor line/total lines
@@ -339,6 +352,9 @@ let g:git_branch_status_ignore_remotes = 1  " ignore remote branches
 nnoremap <C-L> :nohls<CR>
 inoremap <C-L> <C-O>:nohls<CR>
 
+" Map backspace to switch to previous buffer
+nnoremap <BS> <C-^><CR>
+
 " Map Q to sth useful
 nnoremap Q gq
 
@@ -363,3 +379,55 @@ au FileType ruby map <leader>\ :!ruby %
 
 vnoremap <leader>] :!xclip -in -selection clipboard && xclip -out -selection clipboard<CR>
 nnoremap <leader>[ :r!xclip -out -selection clipboard<CR>
+
+" auto save when calling :make
+set autowrite
+
+" Some mappings
+map <C-n> :cnext<CR>
+map <C-m> :cprevious<CR>
+nnoremap <leader>a :cclose<CR>
+
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd FileType go nmap <leader>tt  <Plug>(go-test)
+autocmd FileType go nmap <leader>tf  <Plug>(go-test-func)
+autocmd FileType go nmap <leader>tc  <Plug>(go-test-compile)
+
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
+autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+let g:go_fmt_command = "goimports"
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_generate_tags = 1
+
+"let g:go_metalinter_autosave = 1
+let g:go_metalinter_autosave_enabled = ['vet', 'golint']
+let g:go_metalinter_deadline = "5s"
+
+autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+
+autocmd FileType go nmap <Leader>i <Plug>(go-info)
+let g:go_auto_type_info = 1
+let g:go_auto_sameids = 1
+
+
+

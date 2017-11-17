@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
-if [[ -d /opt/ruby-enterprise ]]; then
-    path=( /opt/ruby-enterprise/bin $path )
+if [[ -d /usr/local/go/bin ]]; then
+    path=( /usr/local/go/bin $path )
 fi
 
 if [[ -d $HOME/.jenv/bin ]]; then
@@ -14,6 +14,7 @@ if [[ -d /opt/maven/current ]]; then
     path=( /opt/maven/current/bin $path )
     export M2_HOME=/opt/maven/current
 fi
+
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -47,7 +48,8 @@ elif uname | grep Linux >> /dev/null; then
     export XDG_CONFIG_HOME="$HOME/.config"
 fi
 
-path=( $path ~/.local/bin . ~/bin )
+export GOPATH=$HOME/src/golib:$HOME/src/go:$HOME/wip/go
+path=( $path ~/.local/bin ~/bin $HOME/src/go/bin $HOME/wip/go/bin $HOME/src/golib/bin . )
 
 typeset -U path
 

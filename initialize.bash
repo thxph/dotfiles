@@ -77,6 +77,10 @@ if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
     fi
 fi
 
+if [[ -e "$HOME/.vim" ]]; then
+    ln -sf $HOME/.vim $HOME/.config/nvim
+fi
+
 if [[ ! -d "$HOME/.vimbackup" ]]; then
     echo "Creating ~/.vimbackup"
     mkdir "$HOME/.vimbackup"
@@ -124,5 +128,6 @@ fi
 mkdir -p ~/.cache/dein
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > /tmp/installer.sh
 sh /tmp/installer.sh ~/.cache/dein
-
+curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > /tmp/installer.sh
+sh /tmp/installer.sh ~/.cache/ndein
 
