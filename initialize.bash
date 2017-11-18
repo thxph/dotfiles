@@ -125,9 +125,23 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
     fi
 fi
 
-mkdir -p ~/.cache/dein
-curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > /tmp/installer.sh
-sh /tmp/installer.sh ~/.cache/dein
-curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > /tmp/installer.sh
-sh /tmp/installer.sh ~/.cache/ndein
+for d in dein ndein; do
+    if [[ ! -d "$HOME/.cache/$d" ]]; then
+        echo "Creating ~/.cache/$d"
+        mkdir -p ~/.cache/$d
+        curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > /tmp/installer.sh
+        sh /tmp/installer.sh ~/.cache/$d
+    fi
+done
+
+printf "\033[1;32;49m=== Type Y/y to install/update fzf: \033[0m"
+read -n 1 c; echo ''
+if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+    if [[ ! -d "$HOME/.fzf" ]]; then
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    else
+        (cd ~/.fzf; git pull origin master)
+    fi
+    ~/.fzf/install --all
+fi
 
