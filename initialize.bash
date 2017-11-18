@@ -77,7 +77,7 @@ if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
     fi
 fi
 
-if [[ -e "$HOME/.vim" ]]; then
+if [[ -e "$HOME/.vim" ]] && [[ ! -e "$HOME/.config/nvim" ]]; then
     ln -sf $HOME/.vim $HOME/.config/nvim
 fi
 
