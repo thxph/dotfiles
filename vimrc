@@ -393,6 +393,15 @@ nnoremap Y y$
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
+nnoremap <leader>f :FZF<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>w :Windows<CR>
+nnoremap <leader><UP> <C-W>k
+nnoremap <leader><DOWN> <C-W>j
+nnoremap <leader><LEFT> <C-W>h
+nnoremap <leader><RIGHT> <C-W>l
+nnoremap <leader><SPACE> :Commands<CR>
+
 "imap <Leader>q <C-j>
 
 "python from powerline.vim import setup as powerline_setup
@@ -400,7 +409,6 @@ vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 "python del powerline_setup
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-
 
 au FileType python map <leader>\ :!python % 
 au FileType ruby map <leader>\ :!ruby % 
@@ -416,7 +424,7 @@ map <C-n> :cnext<CR>
 map <C-m> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd FileType go nmap <leader>\  <Plug>(go-run)
 autocmd FileType go nmap <leader>tt  <Plug>(go-test)
 autocmd FileType go nmap <leader>tf  <Plug>(go-test-func)
 autocmd FileType go nmap <leader>tc  <Plug>(go-test-compile)
@@ -489,5 +497,4 @@ if has('nvim')
 
 
 endif
-
 

@@ -95,19 +95,42 @@ printf "\033[1;32;49m=== Type Y/y to install zsh, tmux, python and powerline: \0
 read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
     if uname -a | grep -iq linux > /dev/null && grep -iq debian /etc/*release* > /dev/null; then
         echo 'Installing stuff ...'
+        sudo apt-get update
         sudo apt-get install aptitude
-        sudo aptitude install python-pip tmux git zsh
+        sudo apt-get -y install python-pip git zsh
+        sudo apt-get -y install debhelper autotools-dev dh-autoreconf file libncurses5-dev libevent-dev pkg-config libutempter-dev build-essential
         echo 'Installing powerline'
         pip install --user git+git://github.com/powerline/powerline
         find $HOME -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
-        if which fc-cache; then
-            echo 'Installing powerline-patched-font'
-            git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
-            find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
-            rm -rfv $HOME/powerline-font-82374846
-            fc-cache -vf $HOME/.fonts/
+        printf "\033[1;32;49m=== Type Y/y to powerline patched fonts: \033[0m"
+        read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+            if which fc-cache; then
+                echo 'Installing powerline-patched-font'
+                git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
+                find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
+                rm -rfv $HOME/powerline-font-82374846
+                fc-cache -vf $HOME/.fonts/
+            fi
         fi
         chsh -s `which zsh`
+        TMUX_VERSION=2.6
+        if [[ -f /usr/local/bin/tmux ]] && ! /usr/local/bin/tmux -V | grep $TMUX_VERSION; then
+            echo "Installing tmux $TMUX_VERSION"
+            cpwd=$PWD
+            mkdir -p "$HOME/src/$USER"
+            cd "$HOME/src/$USER"
+            if [[ ! -d tmux ]]; then
+                git clone https://github.com/tmux/tmux.git
+                cd tmux
+            else
+                cd tmux
+                git fetch --all
+            fi
+            git checkout $TMUX_VERSION
+            make clean
+            sh autogen.sh && ./configure && make && sudo make install
+            cd $cpwd
+        fi
     elif uname -a | grep -iq darwin > /dev/null; then
         if [ -f /usr/local/bin/brew ]; then
             brew install python curl wget python3 tmux zsh git reattach-to-user-namespace
@@ -124,6 +147,8 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
         fi
     fi
 fi
+
+echo $PWD
 
 for d in dein ndein; do
     if [[ ! -d "$HOME/.cache/$d" ]]; then
