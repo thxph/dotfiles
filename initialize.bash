@@ -99,21 +99,25 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
         sudo apt-get install aptitude
         sudo apt-get -y install python-pip git zsh
         sudo apt-get -y install debhelper autotools-dev dh-autoreconf file libncurses5-dev libevent-dev pkg-config libutempter-dev build-essential
-        echo 'Installing powerline'
-        pip install --user git+git://github.com/powerline/powerline
-        find $HOME -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
-        printf "\033[1;32;49m=== Type Y/y to powerline patched fonts: \033[0m"
+        printf "\033[1;32;49m=== Type Y/y to install powerline: \033[0m"
         read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
-            if which fc-cache; then
-                echo 'Installing powerline-patched-font'
-                git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
-                find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
-                rm -rfv $HOME/powerline-font-82374846
-                fc-cache -vf $HOME/.fonts/
+            echo 'Installing powerline'
+            pip install --user git+git://github.com/powerline/powerline
+            find $HOME -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
+            printf "\033[1;32;49m=== Type Y/y to install powerline patched fonts: \033[0m"
+            read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+                if which fc-cache; then
+                    echo 'Installing powerline-patched-font'
+                    git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
+                    find $HOME/powerline-font-82374846 -regextype posix-extended -iregex '.*\.(otf|ttf)' -print0 | xargs -0 -I % mv -v % $HOME/.fonts/
+                    rm -rfv $HOME/powerline-font-82374846
+                    fc-cache -vf $HOME/.fonts/
+                fi
             fi
         fi
         chsh -s `which zsh`
         TMUX_VERSION=2.6
+        echo "Checking tmux version..."
         if [[ -f /usr/local/bin/tmux ]] && ! /usr/local/bin/tmux -V | grep $TMUX_VERSION; then
             echo "Installing tmux $TMUX_VERSION"
             cpwd=$PWD
@@ -130,6 +134,40 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
             make clean
             sh autogen.sh && ./configure && make && sudo make install
             cd $cpwd
+        fi
+        printf "\033[1;32;49m=== Type Y/y to install alacritty: \033[0m"
+        read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+            cpwd=$PWD
+            mkdir -p "$HOME/src/$USER"
+            cd "$HOME/src/$USER"
+            if ! which rustup; then
+                curl https://sh.rustup.rs -sSf | sh
+            fi
+            if [[ ! -d alacritty ]]; then
+                git clone https://github.com/tmux/tmux.git
+                cd alacritty
+            else
+                cd alacritty
+                git pull origin master
+            fi
+            export PATH=$PATH:$HOME/.cargo/bin
+            rustup override set stable
+            rustup update stable
+            sudo apt-get -y install cmake libfreetype6-dev libfontconfig1-dev xclip
+            cargo build --release
+            sudo cp target/release/alacritty /usr/local/bin
+            mkdir -p $HOME/.local/share/applications
+            cp Alacritty.desktop ~/.local/share/applications
+            cd $cpwd
+        fi
+        printf "\033[1;32;49m=== Type Y/y to install neovim: \033[0m"
+        read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+            sudo add-apt-repository ppa:neovim-ppa/stable
+            sudo apt-get update
+            sudo apt-get -y install neovim
+            sudo apt-get -y install python-dev python-pip python3-dev python3-pip
+            pip install --user neovim
+            pip3 install --user neovim
         fi
     elif uname -a | grep -iq darwin > /dev/null; then
         if [ -f /usr/local/bin/brew ]; then

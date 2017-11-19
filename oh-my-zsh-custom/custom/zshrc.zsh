@@ -139,4 +139,12 @@ export NVM_DIR="$HOME/.nvm"
 
 #. /Users/pxt/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
 
+if which fzf > /dev/null; then
+    alias fzfp='fzf --preview '"'"'[[ $(file --mime {}) =~ binary ]] &&
+        echo {} is a binary file ||
+        (highlight -O ansi -l {} ||
+        coderay {} ||
+        rougify {} ||
+        cat {}) 2> /dev/null | head -500'"'"
+fi
 
