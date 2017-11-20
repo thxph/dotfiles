@@ -38,7 +38,7 @@ if dein#load_state(deinpath)
   call dein#add('Raimondi/delimitMate')
   call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
   call dein#add('bling/vim-airline')
-  "call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
+  "call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
   call dein#add('junegunn/fzf.vim')
   call dein#add('fatih/vim-go')
   "call dein#add('fatih/molokai')
@@ -53,7 +53,7 @@ if dein#load_state(deinpath)
       call dein#add('zchee/deoplete-go', {'build': 'make'})
   else
   endif
-  
+
 
   " Required:
   call dein#end()
@@ -410,8 +410,8 @@ nnoremap <leader><SPACE> :Commands<CR>
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
-au FileType python map <leader>\ :!python % 
-au FileType ruby map <leader>\ :!ruby % 
+au FileType python map <leader>\ :!python %
+au FileType ruby map <leader>\ :!ruby %
 
 vnoremap <leader>] :!xclip -in -selection clipboard && xclip -out -selection clipboard<CR>
 nnoremap <leader>[ :r!xclip -out -selection clipboard<CR>
@@ -481,16 +481,16 @@ if has('nvim')
     "let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
     let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 
-    call deoplete#custom#set('_', 'converters', ['converter_auto_paren']) 
+    call deoplete#custom#set('_', 'converters', ['converter_auto_paren'])
 
     inoremap <silent><expr> <TAB>
-		\ pumvisible() ? "\<C-n>" :
-		\ <SID>check_back_space() ? "\<TAB>" :
-		\ deoplete#mappings#manual_complete()
-		function! s:check_back_space() abort "{{{
-		let col = col('.') - 1
-		return !col || getline('.')[col - 1]  =~ '\s'
-		endfunction"}}}
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ deoplete#mappings#manual_complete()
+        function! s:check_back_space() abort "{{{
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~ '\s'
+        endfunction"}}}
 
     " Close the documentation window when completion is done
     autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
