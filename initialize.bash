@@ -200,6 +200,7 @@ done
 printf "\033[1;32;49m=== Type Y/y to install/update fzf: \033[0m"
 read -n 1 c; echo ''
 if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+    sudo apt-get -y install highlight tree
     if [[ ! -d "$HOME/.fzf" ]]; then
         git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     else

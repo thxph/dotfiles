@@ -393,9 +393,9 @@ nnoremap Y y$
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
-nnoremap <leader>f :FZF<CR>
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>w :Windows<CR>
+nnoremap <leader>ff :FZF<CR>
+nnoremap <leader>fb :Buffers<CR>
+nnoremap <leader>fw :Windows<CR>
 nnoremap <leader><UP> <C-W>k
 nnoremap <leader><DOWN> <C-W>j
 nnoremap <leader><LEFT> <C-W>h
