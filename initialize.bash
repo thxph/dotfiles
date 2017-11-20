@@ -166,16 +166,18 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
             sudo apt-get update
             sudo apt-get -y install neovim
             sudo apt-get -y install python-dev python-pip python3-dev python3-pip
+            sudo apt-get -y install highlight tree
             pip install --user neovim
             pip3 install --user neovim
         fi
     elif uname -a | grep -iq darwin > /dev/null; then
         if [ -f /usr/local/bin/brew ]; then
-            brew install python curl wget python3 tmux zsh git reattach-to-user-namespace
+            brew install python curl wget python3 tmux zsh git reattach-to-user-namespace highlight tree
             pip3 install git+git://github.com/powerline/powerline
             pip3 install psutil
+            pip install neovim
+            pip3 install neovim
             if grep -iq '/usr/local/bin/zsh' /etc/shells; then
-
                 printf "    \033[1;34;49m /usr/local/bin/zsh is already in /etc/shells\033[0m\n"
             else
                 printf "    \033[1;34;49m Adding homebrew's zsh to /etc/shells\n\033[0m"
@@ -200,7 +202,6 @@ done
 printf "\033[1;32;49m=== Type Y/y to install/update fzf: \033[0m"
 read -n 1 c; echo ''
 if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
-    sudo apt-get -y install highlight tree
     if [[ ! -d "$HOME/.fzf" ]]; then
         git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     else
