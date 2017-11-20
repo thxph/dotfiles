@@ -115,9 +115,12 @@ set softtabstop=4
 set tabstop=4
 set expandtab
 set autoindent
-autocmd FileType ruby set tabstop=2|set shiftwidth=2|set softtabstop=2
+au FileType ruby set tabstop=2|set shiftwidth=2|set softtabstop=2
+au FileType go set noexpandtab|set shiftwidth=4|set softtabstop=4|set tabstop=4
 
 set textwidth=72                 " Set textwidth
+set formatoptions=cq
+set wrapmargin=0
 
 " Folding settings
 set foldmethod=indent           " Fold based on indent
@@ -132,8 +135,6 @@ set wildignore=*.o,*.obj,*~     " Stuff to ignore when tab completing
 " Display tabs ans trailing spaces
 set list
 set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
-
-set formatoptions-=o            " Don't continue comments when pushing o/O ?
 
 " Vertical/Horizontal scroll off settings
 set scrolloff=7777
@@ -447,6 +448,7 @@ let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_build_constraints = 1
