@@ -118,7 +118,7 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
         chsh -s `which zsh`
         TMUX_VERSION=2.6
         echo "Checking tmux version..."
-        if [[ -f /usr/local/bin/tmux ]] && ! /usr/local/bin/tmux -V | grep $TMUX_VERSION; then
+        if [[ ! -f /usr/local/bin/tmux ]] || ! /usr/local/bin/tmux -V | grep $TMUX_VERSION; then
             echo "Installing tmux $TMUX_VERSION"
             cpwd=$PWD
             mkdir -p "$HOME/src/$USER"
@@ -131,7 +131,7 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
                 git fetch --all
             fi
             git checkout $TMUX_VERSION
-            make clean
+            make clean || echo nothing to clean
             sh autogen.sh && ./configure && make && sudo make install
             cd $cpwd
         fi
@@ -144,7 +144,7 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
                 curl https://sh.rustup.rs -sSf | sh
             fi
             if [[ ! -d alacritty ]]; then
-                git clone https://github.com/tmux/tmux.git
+                git clone https://github.com/jwilm/alacritty.git
                 cd alacritty
             else
                 cd alacritty
