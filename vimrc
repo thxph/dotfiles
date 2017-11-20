@@ -1,10 +1,8 @@
+scriptencoding utf-8
 
 "dein Scripts-----------------------------
-if &compatible
-  set nocompatible               " Be iMproved
-endif
 
-set rtp+=~/.fzf
+set runtimepath+=~/.fzf
 
 " Required:
 
@@ -30,8 +28,9 @@ if dein#load_state(deinpath)
   "call dein#add('Shougo/neosnippet-snippets')
   "call dein#add('taq/vim-git-branch-info')
   call dein#add('ctrlpvim/ctrlp.vim')
+  call dein#add('airblade/vim-gitgutter')
   call dein#add('scrooloose/nerdcommenter')
-  call dein#add('scrooloose/syntastic')
+  "call dein#add('scrooloose/syntastic')
   call dein#add('tpope/vim-fugitive')
   "call dein#add('davidhalter/jedi-vim')
   call dein#add('tpope/vim-surround')
@@ -45,6 +44,7 @@ if dein#load_state(deinpath)
   call dein#add('joshdick/onedark.vim')
   call dein#add('AndrewRadev/splitjoin.vim')
   call dein#add('SirVer/ultisnips')
+  call dein#add('w0rp/ale')
 
   if has('nvim')
       call dein#add('Shougo/deoplete.nvim')
@@ -239,10 +239,15 @@ nnoremap <leader><SPACE> :Commands<CR>
 
 "imap <Leader>q <C-j>
 
-"Airline configuration
+" Ale configuration
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
+
+" Airline configuration
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_detect_modified = 1
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#ale#enabled = 1
 
 au FileType python map <leader>\ :!python %
 au FileType ruby map <leader>\ :!ruby %
