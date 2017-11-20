@@ -7,21 +7,21 @@ set runtimepath+=~/.fzf
 " Required:
 
 if has('nvim')
-    let deinpath = '~/.cache/ndein'
+    let b:deinpath = '~/.cache/ndein'
 else
-    let deinpath = '~/.cache/dein'
+    let b:deinpath = '~/.cache/dein'
 endif
 
 
-execute "set runtimepath+=".deinpath."/repos/github.com/Shougo/dein.vim"
+execute 'set runtimepath+='.b:deinpath.'/repos/github.com/Shougo/dein.vim'
 
 " Required:
-if dein#load_state(deinpath)
-  call dein#begin(deinpath)
+if dein#load_state(b:deinpath)
+  call dein#begin(b:deinpath)
 
   " Let dein manage dein
   " Required:
-  call dein#add(deinpath.'/repos/github.com/Shougo/dein.vim')
+  call dein#add(b:deinpath.'/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
   "call dein#add('Shougo/neosnippet.vim')
@@ -71,14 +71,14 @@ endif
 
 "End dein Scripts-------------------------
 
-if (has("nvim"))
+if (has('nvim'))
     "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
 "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
 " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-if (has("termguicolors"))
+if (has('termguicolors'))
     set termguicolors
 endif
 
@@ -92,7 +92,7 @@ set history=1000                " Store 1000 :cmdline history
 set showcmd                     " Show imcomplete cmds down the bottom
 set noshowmode                    " Show current mode at the bottom
 
-if has("patch-7.4.314")
+if has('patch-7.4.314')
     set shortmess+=c
 endif
 
@@ -109,14 +109,32 @@ set ruler                       " Show current cursor position all the time
 set backup
 set backupdir =$HOME/.vimbackup
 
-" Indent settings
+" default indent settings
 set shiftwidth=4
 set softtabstop=4
 set tabstop=4
 set expandtab
 set autoindent
-au FileType ruby set tabstop=2|set shiftwidth=2|set softtabstop=2
-au FileType go set noexpandtab|set shiftwidth=4|set softtabstop=4|set tabstop=4
+
+augroup pythonConf
+    au FileType python map <leader>\ :!python %
+augroup END
+
+augroup rubyConf
+    au FileType ruby map <leader>\ :!ruby %
+    au FileType ruby set tabstop=2|set shiftwidth=2|set softtabstop=2
+augroup END
+
+augroup golangConf
+    au FileType go set noexpandtab|set shiftwidth=4|set softtabstop=4|set tabstop=4
+    au FileType go nmap <leader>\  <Plug>(go-run)
+    au FileType go nmap <leader>tt  <Plug>(go-test)
+    au FileType go nmap <leader>tf  <Plug>(go-test-func)
+    au FileType go nmap <leader>tc  <Plug>(go-test-compile)
+    au FileType go nmap <Leader>i <Plug>(go-info)
+    au FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+    au FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+augroup END
 
 set textwidth=72                 " Set textwidth
 set formatoptions=cq
@@ -170,8 +188,8 @@ set grepprg=grep\ -nH\ $*
 " Jump to last cursor pos when opening a file
 " don't do it when writing a commit log entry
 function! SetCursorPosition()
-  if &filetype !~ 'commit\c'
-    if line("'\"") > 0 && line("'\"") <= line("$")
+  if &filetype !~? 'commit\c'
+    if line("'\"") > 0 && line("'\"") <= line('$')
       exe "normal! g`\""
       normal! zz
     endif
@@ -180,17 +198,19 @@ endfunction
 
 " Visual search function
 function! s:VSetSearch()
-  let temp = @@
+  let l:temp = @@
   norm! gvy
   let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  let @@ = temp
+  let @@ = l:temp
 endfunction
 
 " ==============================================================================
 " Autocmd to run when loading new buffer
 
 " Jump to last cursor pos when opening a file
-autocmd BufReadPost * call SetCursorPosition()
+augroup reloadLastPos
+    autocmd BufReadPost * call SetCursorPosition()
+augroup END
 
 " ==============================================================================
 " Global Variables Settings
@@ -242,6 +262,8 @@ nnoremap <leader><SPACE> :Commands<CR>
 " Ale configuration
 let g:ale_sign_error = '⤫'
 let g:ale_sign_warning = '⚠'
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Airline configuration
 let g:airline#extensions#tabline#enabled = 1
@@ -249,8 +271,6 @@ let g:airline_detect_modified = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#ale#enabled = 1
 
-au FileType python map <leader>\ :!python %
-au FileType ruby map <leader>\ :!ruby %
 
 vnoremap <leader>] :!xclip -in -selection clipboard && xclip -out -selection clipboard<CR>
 nnoremap <leader>[ :r!xclip -out -selection clipboard<CR>
@@ -263,11 +283,6 @@ map <C-n> :cnext<CR>
 map <C-m> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 
-autocmd FileType go nmap <leader>\  <Plug>(go-run)
-autocmd FileType go nmap <leader>tt  <Plug>(go-test)
-autocmd FileType go nmap <leader>tf  <Plug>(go-test-func)
-autocmd FileType go nmap <leader>tc  <Plug>(go-test-compile)
-
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
   let l:file = expand('%')
@@ -278,9 +293,7 @@ function! s:build_go_files()
   endif
 endfunction
 
-autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
-autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-let g:go_fmt_command = "goimports"
+let g:go_fmt_command = 'goimports'
 
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
@@ -294,18 +307,17 @@ let g:go_highlight_generate_tags = 1
 
 "let g:go_metalinter_autosave = 1
 let g:go_metalinter_autosave_enabled = ['vet', 'golint']
-let g:go_metalinter_deadline = "5s"
+let g:go_metalinter_deadline = '5s'
 
 autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
 autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
 autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
 autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 
-autocmd FileType go nmap <Leader>i <Plug>(go-info)
 let g:go_auto_type_info = 1
 let g:go_auto_sameids = 1
 
-let g:UltiSnipsExpandTrigger="<S-Tab>"
+let g:UltiSnipsExpandTrigger='<S-Tab>'
 
 if has('nvim')
     set completeopt+=noselect
@@ -328,8 +340,8 @@ if has('nvim')
         \ <SID>check_back_space() ? "\<TAB>" :
         \ deoplete#mappings#manual_complete()
         function! s:check_back_space() abort "{{{
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1]  =~ '\s'
+        let l:col = col('.') - 1
+        return !l:col || getline('.')[l:col - 1]  =~? '\s'
         endfunction"}}}
 
     " Close the documentation window when completion is done
