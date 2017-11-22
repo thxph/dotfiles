@@ -34,6 +34,8 @@ if dein#load_state(b:deinpath)
   call dein#add('tpope/vim-fugitive')
   "call dein#add('davidhalter/jedi-vim')
   call dein#add('tpope/vim-surround')
+  call dein#add('tpope/vim-unimpaired')
+  call dein#add('tpope/vim-eunuch')
   call dein#add('Raimondi/delimitMate')
   call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
   call dein#add('bling/vim-airline')
@@ -155,7 +157,7 @@ set list
 set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
 
 " Vertical/Horizontal scroll off settings
-set scrolloff=7777
+set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
 
@@ -278,10 +280,8 @@ nnoremap <leader>[ :r!xclip -out -selection clipboard<CR>
 " auto save when calling :make
 set autowrite
 
-" Some mappings
-map <C-n> :cnext<CR>
-map <C-m> :cprevious<CR>
-nnoremap <leader>a :cclose<CR>
+nnoremap <leader>a :cclose<CR>:lclose<CR>
+nnoremap <leader>A :cw<CR>:lw<CR>
 
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
