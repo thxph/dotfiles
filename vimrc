@@ -273,10 +273,6 @@ let g:airline_detect_modified = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#ale#enabled = 1
 
-
-vnoremap <leader>] :!xclip -in -selection clipboard && xclip -out -selection clipboard<CR>
-nnoremap <leader>[ :r!xclip -out -selection clipboard<CR>
-
 " auto save when calling :make
 set autowrite
 
