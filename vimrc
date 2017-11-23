@@ -259,6 +259,10 @@ nnoremap <leader><UP> <C-W>k
 nnoremap <leader><DOWN> <C-W>j
 nnoremap <leader><LEFT> <C-W>h
 nnoremap <leader><RIGHT> <C-W>l
+nnoremap <leader>w<UP> <C-W>K
+nnoremap <leader>w<DOWN> <C-W>J
+nnoremap <leader>w<LEFT> <C-W>H
+nnoremap <leader>w<RIGHT> <C-W>L
 nnoremap <leader><SPACE> :Commands<CR>
 
 "imap <Leader>q <C-j>

@@ -148,3 +148,5 @@ if which fzf > /dev/null; then
         cat {}) 2> /dev/null | head -500'"'"
 fi
 
+export FZF_COMPLETION_TRIGGER='~~'
+
