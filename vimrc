@@ -1,5 +1,7 @@
 scriptencoding utf-8
 
+let g:mapleader = ' '
+
 "dein Scripts-----------------------------
 
 set runtimepath+=~/.fzf
