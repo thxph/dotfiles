@@ -138,6 +138,7 @@ augroup golangConf
     au FileType go nmap <Leader>i <Plug>(go-info)
     au FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
     au FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+    au FileType go nmap <F9> :GoCoverageToggle -short<cr>
 augroup END
 
 set textwidth=72                 " Set textwidth
