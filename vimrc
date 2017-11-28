@@ -56,6 +56,7 @@ if dein#load_state(b:deinpath)
       call dein#add('Shougo/neopairs.vim')
       call dein#add('Shougo/neoinclude.vim')
       call dein#add('zchee/deoplete-go', {'build': 'make'})
+      call dein#add('sebdah/vim-delve')
   else
   endif
 

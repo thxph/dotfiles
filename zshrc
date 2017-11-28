@@ -21,7 +21,7 @@ export ZSH_THEME="tessa"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(macports lol compleat cloudapp svn extract python git ruby osx gem vi-mode terminalapp zsh-syntax-highlighting mvn thanh)
+plugins=(golang lol compleat cloudapp svn extract python git ruby osx gem vi-mode terminalapp zsh-syntax-highlighting mvn thanh)
 
 source $ZSH/oh-my-zsh.sh
 
