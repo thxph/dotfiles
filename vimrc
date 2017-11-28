@@ -32,6 +32,7 @@ if dein#load_state(b:deinpath)
   call dein#add('ctrlpvim/ctrlp.vim')
   call dein#add('airblade/vim-gitgutter')
   call dein#add('scrooloose/nerdcommenter')
+  call dein#add('scrooloose/nerdtree')
   "call dein#add('scrooloose/syntastic')
   call dein#add('tpope/vim-fugitive')
   "call dein#add('davidhalter/jedi-vim')
@@ -119,6 +120,8 @@ set softtabstop=4
 set tabstop=4
 set expandtab
 set autoindent
+
+map <F1> :NERDTreeToggle<CR>
 
 augroup pythonConf
     au FileType python map <leader>\ :!python %
