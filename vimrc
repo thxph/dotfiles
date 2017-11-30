@@ -122,6 +122,9 @@ set tabstop=4
 set expandtab
 set autoindent
 
+" commands
+command BD bp|bd #
+
 map <F1> :NERDTreeToggle<CR>
 
 augroup pythonConf
