@@ -134,11 +134,6 @@ if uname | grep Darwin >> /dev/null; then
 
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
-#. /Users/pxt/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
-
 if which fzf > /dev/null; then
     alias fzfp='fzf --preview '"'"'[[ $(file --mime {}) =~ binary ]] &&
         echo {} is a binary file ||
