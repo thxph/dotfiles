@@ -23,7 +23,7 @@ typeset -U manpath
 manpath=( $manpath )
 
 export EDITOR=/usr/bin/ex
-export VISUAL=/usr/bin/vim
+export VISUAL=/usr/bin/nvim
 export CLICOLOR=1
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8

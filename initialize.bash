@@ -91,13 +91,13 @@ if [[ ! -d "$HOME/.fonts" ]]; then
     mkdir "$HOME/.fonts"
 fi
 
-printf "\033[1;32;49m=== Type Y/y to install zsh, tmux, python and powerline: \033[0m"
+printf "\033[1;32;49m=== Type Y/y to install zsh, python and powerline: \033[0m"
 read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
     if uname -a | grep -iq linux > /dev/null && grep -iq debian /etc/*release* > /dev/null; then
         echo 'Installing stuff ...'
         sudo apt-get update
         sudo apt-get install aptitude
-        sudo apt-get -y install python-pip git zsh
+        sudo apt-get -y install python-pip git zsh curl
         sudo apt-get -y install debhelper autotools-dev dh-autoreconf file libncurses5-dev libevent-dev pkg-config libutempter-dev build-essential
         printf "\033[1;32;49m=== Type Y/y to install powerline: \033[0m"
         read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
@@ -115,50 +115,9 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
                 fi
             fi
         fi
-        chsh -s `which zsh`
-        TMUX_VERSION=2.6
-        echo "Checking tmux version..."
-        if [[ ! -f /usr/local/bin/tmux ]] || ! /usr/local/bin/tmux -V | grep $TMUX_VERSION; then
-            echo "Installing tmux $TMUX_VERSION"
-            cpwd=$PWD
-            mkdir -p "$HOME/src/$USER"
-            cd "$HOME/src/$USER"
-            if [[ ! -d tmux ]]; then
-                git clone https://github.com/tmux/tmux.git
-                cd tmux
-            else
-                cd tmux
-                git fetch --all
-            fi
-            git checkout $TMUX_VERSION
-            make clean || echo nothing to clean
-            sh autogen.sh && ./configure && make && sudo make install
-            cd $cpwd
-        fi
-        printf "\033[1;32;49m=== Type Y/y to install alacritty: \033[0m"
+        printf "\033[1;32;49m=== Type Y/y to change default shell to zsh: \033[0m"
         read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
-            cpwd=$PWD
-            mkdir -p "$HOME/src/$USER"
-            cd "$HOME/src/$USER"
-            if ! which rustup; then
-                curl https://sh.rustup.rs -sSf | sh
-            fi
-            if [[ ! -d alacritty ]]; then
-                git clone https://github.com/jwilm/alacritty.git
-                cd alacritty
-            else
-                cd alacritty
-                git pull origin master
-            fi
-            export PATH=$PATH:$HOME/.cargo/bin
-            rustup override set stable
-            rustup update stable
-            sudo apt-get -y install cmake libfreetype6-dev libfontconfig1-dev xclip
-            cargo build --release
-            sudo cp target/release/alacritty /usr/local/bin
-            mkdir -p $HOME/.local/share/applications
-            cp Alacritty.desktop ~/.local/share/applications
-            cd $cpwd
+        chsh -s `which zsh`
         fi
         printf "\033[1;32;49m=== Type Y/y to install neovim: \033[0m"
         read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
@@ -190,6 +149,9 @@ fi
 
 echo $PWD
 
+printf "\033[1;32;49m=== Type Y/y to init dein: \033[0m"
+read -n 1 c; echo ''
+if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
 for d in dein ndein; do
     if [[ ! -d "$HOME/.cache/$d" ]]; then
         echo "Creating ~/.cache/$d"
@@ -198,6 +160,7 @@ for d in dein ndein; do
         sh /tmp/installer.sh ~/.cache/$d
     fi
 done
+fi
 
 printf "\033[1;32;49m=== Type Y/y to install/update fzf: \033[0m"
 read -n 1 c; echo ''
