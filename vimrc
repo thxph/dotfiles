@@ -341,7 +341,7 @@ if has('nvim')
     "let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
     let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 
-    call deoplete#custom#set('_', 'converters', ['converter_auto_paren'])
+    call deoplete#custom#source('_', 'converters', ['converter_auto_paren'])
 
     inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
