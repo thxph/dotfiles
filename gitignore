@@ -29,4 +29,5 @@ tessa.zsh-theme
 *.synctex.gz
 
 vim/bundle/*
+vim/plugged/*
 /.idea/
