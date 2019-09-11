@@ -1,79 +1,39 @@
 scriptencoding utf-8
 
 let g:mapleader = ' '
-
-"dein Scripts-----------------------------
-
 set runtimepath+=~/.fzf
 
-" Required:
+call plug#begin('~/.vim/plugged')
 
-if has('nvim')
-    let b:deinpath = '~/.cache/ndein'
-else
-    let b:deinpath = '~/.cache/dein'
-endif
+Plug 'joshdick/onedark.vim'
+Plug 'bling/vim-airline'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/nerdcommenter'
+"Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-unimpaired'
 
+Plug 'tpope/vim-surround'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+"Plug 'vim-syntastic/syntastic'
+Plug 'junegunn/vim-slash'
+Plug 'junegunn/gv.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'dense-analysis/ale'
 
-execute 'set runtimepath+='.b:deinpath.'/repos/github.com/Shougo/dein.vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
-" Required:
-if dein#load_state(b:deinpath)
-  call dein#begin(b:deinpath)
-
-  " Let dein manage dein
-  " Required:
-  call dein#add(b:deinpath.'/repos/github.com/Shougo/dein.vim')
-
-  " Add or remove your plugins here:
-  "call dein#add('Shougo/neosnippet.vim')
-  "call dein#add('Shougo/neosnippet-snippets')
-  "call dein#add('taq/vim-git-branch-info')
-  call dein#add('ctrlpvim/ctrlp.vim')
-  call dein#add('airblade/vim-gitgutter')
-  call dein#add('scrooloose/nerdcommenter')
-  call dein#add('scrooloose/nerdtree')
-  "call dein#add('scrooloose/syntastic')
-  call dein#add('tpope/vim-fugitive')
-  "call dein#add('davidhalter/jedi-vim')
-  call dein#add('tpope/vim-surround')
-  call dein#add('tpope/vim-unimpaired')
-  call dein#add('tpope/vim-eunuch')
-  call dein#add('Raimondi/delimitMate')
-  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
-  call dein#add('bling/vim-airline')
-  "call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
-  call dein#add('junegunn/fzf.vim')
-  call dein#add('fatih/vim-go')
-  "call dein#add('fatih/molokai')
-  call dein#add('joshdick/onedark.vim')
-  call dein#add('AndrewRadev/splitjoin.vim')
-  call dein#add('SirVer/ultisnips')
-  call dein#add('w0rp/ale')
-
-  if has('nvim')
-      call dein#add('Shougo/deoplete.nvim')
-      call dein#add('Shougo/neopairs.vim')
-      call dein#add('Shougo/neoinclude.vim')
-      call dein#add('zchee/deoplete-go', {'build': 'make'})
-      call dein#add('sebdah/vim-delve')
-  else
-  endif
-
-
-  " Required:
-  call dein#end()
-  call dein#save_state()
-endif
+call plug#end()
 
 " Required:
 filetype plugin indent on
 syntax enable
 
 " If you want to install not installed plugins on startup.
-if dein#check_install()
-  call dein#install()
-endif
+"if dein#check_install()
+"  call dein#install()
+"endif
 
 "End dein Scripts-------------------------
 
@@ -85,7 +45,7 @@ endif
 "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
 " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
 if (has('termguicolors'))
-    set termguicolors
+""    set termguicolors
 endif
 
 " ==============================================================================
@@ -224,29 +184,6 @@ augroup reloadLastPos
     autocmd BufReadPost * call SetCursorPosition()
 augroup END
 
-" ==============================================================================
-" Global Variables Settings
-
-" Mark syntax errors with :signs
-"let g:syntastic_enable_signs=1
-
-" Git branch info settings
-"let g:git_branch_status_head_current = 1    " just show current head branch name
-"let g:git_branch_status_text = ""           " text be4 branch
-"let g:git_branch_status_nogit = "[-na-]"    " message when there's no git repos
-"let g:git_branch_status_around = "[]"       " puts [] around str
-"let g:git_branch_status_ignore_remotes = 1  " ignore remote branches
-
-"" Map leader to \
-"let mapleader = "\\"
-
-" ==============================================================================
-" Mapping settings
-
-" Map ^L to :noh
-nnoremap <C-L> :nohls<CR>
-inoremap <C-L> <C-O>:nohls<CR>
-
 " Map backspace to switch to previous buffer
 nnoremap <BS> <C-^><CR>
 
@@ -261,8 +198,8 @@ vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 nnoremap <leader>ff :FZF<CR>
-nnoremap <leader>fb :Buffers<CR>
-nnoremap <leader>fw :Windows<CR>
+nnoremap <leader>fb :buffers<CR>
+"nnoremap <leader>fw :Windows<CR>
 nnoremap <leader><UP> <C-W>k
 nnoremap <leader><DOWN> <C-W>j
 nnoremap <leader><LEFT> <C-W>h
@@ -326,35 +263,4 @@ autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 
 let g:go_auto_type_info = 1
 let g:go_auto_sameids = 1
-
-let g:UltiSnipsExpandTrigger='<S-Tab>'
-
-if has('nvim')
-    set completeopt+=noselect
-
-    " Skip the check of neovim module
-    let g:python3_host_skip_check = 1
-
-    " Run deoplete.nvim automatically
-    let g:deoplete#enable_at_startup = 1
-    " deoplete-go settings
-    "let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
-    let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-
-    call deoplete#custom#source('_', 'converters', ['converter_auto_paren'])
-
-    inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ deoplete#mappings#manual_complete()
-        function! s:check_back_space() abort "{{{
-        let l:col = col('.') - 1
-        return !l:col || getline('.')[l:col - 1]  =~? '\s'
-        endfunction"}}}
-
-    " Close the documentation window when completion is done
-    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
-
-endif
 

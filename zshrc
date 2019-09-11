@@ -25,7 +25,7 @@ plugins=(golang lol compleat history httpie scd aws redis-cli wd jsontools \
     fasd docker colored-man-pages zsh-navigation-tools colorize extract \
     python git ruby gem vi-mode zsh-syntax-highlighting mvn thanh)
 if uname | grep Darwin >> /dev/null; then
-    plugins+=(osx brew)
+    plugins+=(osx)
 elif uname | grep Linux >> /dev/null; then
     plugins+=(copydir copybuffer)
 fi

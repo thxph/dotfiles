@@ -36,7 +36,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 #RPROMPT='${return_status}%{$reset_color%}'
 
 
-RPROMPT='%D{%H:%M:%S}'
+#RPROMPT='%D{%H:%M:%S}'
 
 #TMOUT=1
 
