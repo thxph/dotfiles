@@ -172,3 +172,17 @@ if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
     ~/.fzf/install --all
 fi
 
+while [[ x${git_global_name} == 'x' ]]; do
+    read -rp "gitconfig global name: " git_global_name
+done
+while [[ x${git_global_email} == 'x' ]]; do
+    read -rp "gitconfig global email: " git_global_email
+done
+
+cat <<EOF > $HOME/.gitconfigp
+[user]
+	name = ${git_global_name}
+	email = ${git_global_email}
+[core]
+	excludesfile = $HOME/.gitignore
+EOF

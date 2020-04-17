@@ -38,7 +38,7 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
         NVM_AUTO_LOAD_VERSION=$(nvm_resolve_local_alias default)
         echo "$NVM_AUTO_LOAD_VERSION" > "$NVM_DIR/_default_version"
     fi
-    nvm use --silent "$NVM_AUTO_LOAD_VERSION"
+    nvm use --silent "$NVM_AUTO_LOAD_VERSION" > /dev/null
 fi
 
 typeset -U manpath

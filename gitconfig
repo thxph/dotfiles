@@ -1,14 +1,5 @@
-[user]
-	name = thxph
-    email = thanh.x.ph@gmail.com
-[core]
-	excludesfile = /Users/thxph/.gitignore
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+[include]
+	path = .gitconfigp
 [push]
 	default = simple
 [url "git@github.com:"]
