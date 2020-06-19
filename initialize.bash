@@ -106,6 +106,7 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
             ln -sfv /usr/local/lib/python$(python3 --version | sed 's/.*\(3\..\).*/\1/')/dist-packages/powerline/bindings/tmux/powerline.conf $HOME/.powerline-tmux.conf
             printf "\033[1;32;49m=== Type Y/y to install powerline patched fonts: \033[0m"
             read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+                sudo apt install -y fontconfig
                 if which fc-cache; then
                     echo 'Installing powerline-patched-font'
                     git clone https://github.com/Lokaltog/powerline-fonts $HOME/powerline-font-82374846
