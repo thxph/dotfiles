@@ -1,45 +1,43 @@
 #!/usr/bin/env zsh
 
+#zmodload zsh/zprof
+
 if [[ -d /usr/local/go/bin ]]; then
-    path=( /usr/local/go/bin $path )
+    path_prepend=( /usr/local/go/bin $path_prepend )
 fi
 
 if [[ -d $HOME/.jenv/bin ]]; then
-    path=( $HOME/.jenv/bin $path )
-    eval "$(jenv init -)"
-    export JAVA_HOME=$(jenv javahome)
+    path_prepend=( $HOME/.jenv/shims $path_prepend )
+    path_append=( $path_append $HOME/.jenv/bin )
+    eval "$($HOME/.jenv/bin/jenv init -)"
 fi
 
-if [[ -d /opt/maven/current ]]; then
-    path=( /opt/maven/current/bin $path )
-    export M2_HOME=/opt/maven/current
-fi
-
-
-# Load nvm if present | Credit to https://github.com/nylen/dotfiles/blob/master/.bashrc_nylen_dotfiles
-export NVM_DIR="$HOME/.nvm"
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-    # Load nvm but don't use it yet: we need to do some other hacks first.
-    # See https://github.com/creationix/nvm/issues/1261#issuecomment-366879288
-    source "$NVM_DIR/nvm.sh" --no-use
-    # I don't need this check, and it's slow (loads npm).
-    # Do not use the npm `prefix` config; do not report related bugs to nvm ;)
-    nvm_die_on_prefix() {
-        return 0
-    }
-    # This also loads npm; let's just skip it.
-    nvm_print_npm_version() {
-        return 0
-    }
-    # nvm_resolve_local_alias can also be slow; cache it.
-    if [ -s "$NVM_DIR/_default_version" ]; then
-        NVM_AUTO_LOAD_VERSION=$(cat "$NVM_DIR/_default_version")
-    else
-        NVM_AUTO_LOAD_VERSION=$(nvm_resolve_local_alias default)
-        echo "$NVM_AUTO_LOAD_VERSION" > "$NVM_DIR/_default_version"
+function load-nvm() {
+    # Load nvm if present | Credit to https://github.com/nylen/dotfiles/blob/master/.bashrc_nylen_dotfiles
+    export NVM_DIR="$HOME/.nvm"
+    if [ -s "$NVM_DIR/nvm.sh" ]; then
+        # Load nvm but don't use it yet: we need to do some other hacks first.
+        # See https://github.com/creationix/nvm/issues/1261#issuecomment-366879288
+        source "$NVM_DIR/nvm.sh" --no-use
+        # I don't need this check, and it's slow (loads npm).
+        # Do not use the npm `prefix` config; do not report related bugs to nvm ;)
+        nvm_die_on_prefix() {
+            return 0
+        }
+        # This also loads npm; let's just skip it.
+        nvm_print_npm_version() {
+            return 0
+        }
+        # nvm_resolve_local_alias can also be slow; cache it.
+        if [ -s "$NVM_DIR/_default_version" ]; then
+            NVM_AUTO_LOAD_VERSION=$(cat "$NVM_DIR/_default_version")
+        else
+            NVM_AUTO_LOAD_VERSION=$(nvm_resolve_local_alias default)
+            echo "$NVM_AUTO_LOAD_VERSION" > "$NVM_DIR/_default_version"
+        fi
+        nvm use --silent "$NVM_AUTO_LOAD_VERSION" > /dev/null
     fi
-    nvm use --silent "$NVM_AUTO_LOAD_VERSION" > /dev/null
-fi
+}
 
 typeset -U manpath
 manpath=( $manpath )
@@ -72,11 +70,15 @@ fi
 
 # set PATH
 if uname | grep Darwin >> /dev/null; then
-    path=( /usr/local/bin $path /usr/texbin  /usr/local/opt/python/libexec/bin ~/Library/Python/2.7/bin )
+    path_prepend=( $path_prepend /usr/local/bin )
+    path_append=( $path_append /usr/texbin /usr/local/opt/python/libexec/bin ~/Library/Python/2.7/bin )
 fi
 export GOPATH=$HOME/go
-path=( $path ~/.local/bin ~/bin $HOME/go/bin $HOME/wip/bin . )
+path=( $path_prepend $path $path_append $HOME/go/bin $HOME/wip/bin . )
 typeset -U path
+
+export path_prepend
+export path_append
 
 # use nvim
 export VISUAL=`which nvim`

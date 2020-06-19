@@ -21,9 +21,23 @@ export ZSH_THEME="tessa"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(golang lol compleat history httpie scd aws redis-cli wd jsontools \
-    fasd docker colored-man-pages zsh-navigation-tools colorize extract \
-    python git ruby gem vi-mode zsh-syntax-highlighting mvn thanh)
+plugins=(
+    golang \
+    lol \
+    compleat \
+    history \
+    scd \
+    aws \
+    docker \
+    colored-man-pages \
+    zsh-navigation-tools \
+    colorize \
+    extract \
+    python \
+    git \
+    vi-mode \
+    zsh-syntax-highlighting \
+    thanh)
 if uname | grep Darwin >> /dev/null; then
     plugins+=(osx)
 elif uname | grep Linux >> /dev/null; then
@@ -35,5 +49,4 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 #export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/texbin:/usr/X11/bin
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
+#zprof
