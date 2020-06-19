@@ -94,6 +94,11 @@ alias lsa='ls -alkiGF'
 alias rm='rm -r'
 alias cp='cp -vr'
 
+if which nvim > /dev/null; then
+  alias vim="nvim"
+  alias vi="nvim"
+fi
+
 # Aliases for tar command
   # create/extract/list/append tar
   alias ctar='tar -pcvf'
