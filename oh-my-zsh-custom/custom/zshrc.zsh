@@ -129,7 +129,7 @@ if [[ -d $HOME/Dropbox/Public/temp ]]; then
     -name "*" -type f -mtime +10 -exec rm -r {} \;
 fi
 
-# aliases for OS X system
+# for OS X
 if uname | grep Darwin >> /dev/null; then
     alias port='sudo port'
     alias sha512sum='gsha512sum'
@@ -137,6 +137,7 @@ if uname | grep Darwin >> /dev/null; then
     manpath=(/opt/local/man /usr/local/man $manpath)
     cdpath=($cdpath ~/Documents)
 
+    export HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
 fi
 
 if which fzf > /dev/null; then
@@ -150,3 +151,10 @@ fi
 
 export FZF_COMPLETION_TRIGGER=',,'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
+autoload -Uz add-zsh-hook
+
+source $HOME/.oh-my-zsh/custom/zsh-histdb-fzf/fzf-histdb.zsh
+bindkey '^Q' histdb-fzf-widget
