@@ -20,7 +20,7 @@ histdb-fzf-query(){
              s d t
 
   local where=""
-  local everywhere=0
+  local everywhere=1
   for opt ($opts); do
       case $opt in
           -s)
