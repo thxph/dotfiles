@@ -153,8 +153,8 @@ export FZF_COMPLETION_TRIGGER=',,'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
-source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
-autoload -Uz add-zsh-hook
+export ATUIN_NOBIND=true
+eval "$(atuin init zsh)"
+bindkey '^r' _atuin_search_widget
 
-source $HOME/.oh-my-zsh/custom/zsh-histdb-fzf/fzf-histdb.zsh
-bindkey '^Q' histdb-fzf-widget
+

@@ -7,6 +7,3 @@
 [submodule "vim/bundle/neobundle.vim"]
 	path = vim/bundle/neobundle.vim
 	url = https://github.com/Shougo/neobundle.vim
-[submodule "oh-my-zsh-custom/custom/plugins/zsh-histdb"]
-	path = oh-my-zsh-custom/custom/plugins/zsh-histdb
-	url = https://github.com/larkery/zsh-histdb

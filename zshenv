@@ -83,3 +83,4 @@ export path_append
 # use nvim
 export VISUAL=`which nvim`
 
+. "$HOME/.cargo/env"
