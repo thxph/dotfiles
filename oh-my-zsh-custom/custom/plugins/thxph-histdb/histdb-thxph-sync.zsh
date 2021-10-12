@@ -34,4 +34,8 @@ left join sync.commands c on c.argv = co.argv
 left join sync.places p on (p.host = po.host
 and p.dir = po.dir)
 ;
+
+delete from history where id not in (select min(id) from history group by command_id,place_id,exit_status);
+delete from sync.history where id not in (select min(id) from sync.history group by command_id,place_id,exit_status);
+
 EOF
