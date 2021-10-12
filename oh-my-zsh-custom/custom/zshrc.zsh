@@ -152,9 +152,3 @@ fi
 export FZF_COMPLETION_TRIGGER=',,'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-
-export ATUIN_NOBIND=true
-eval "$(atuin init zsh)"
-bindkey '^r' _atuin_search_widget
-
-
