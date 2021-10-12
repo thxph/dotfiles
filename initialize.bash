@@ -43,14 +43,24 @@ chkln () {
     done
 }
 
+confirmYn () {
+    printf "$1"" (Y/n)"
+    read -n 1 a
+    while [[ ! $a == "Y" && ! $a == "n" ]]; do
+        printf "\nPlease answer (Y/n)"
+        read -n 1 a
+    done
+    echo ''
+    if [[ $a == "Y" ]]; then
+        $2
+    fi
+}
+
 printf "\033[1;31;49m=== Conflicting dotfiles in $HOME:\n\033[0m"
 mkln '' f
 mkln 'config/' f
 chkln 'bin/'
-printf "\033[1;32;49m=== Type Y/y to overwrite those files: \033[0m"
-read -n 1 c
-echo ''
-if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+stepInitDotfiles () {
     if [[ ! -d "$HOME/.config" ]]; then
         echo "Creating ~/.config"
         mkdir "$HOME/.config"
@@ -77,7 +87,8 @@ if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
         find "$here/oh-my-zsh-custom/custom/plugins" -depth 1 -print0 | xargs -0 -L 1 -I % ln -sfhv % "$HOME/.oh-my-zsh/custom/plugins/"
         find "$here/oh-my-zsh-custom/custom/ext" -depth 1 -print0 | xargs -0 -L 1 -I % ln -sfhv % "$HOME/.oh-my-zsh/custom/"
     fi
-fi
+}
+confirmYn "\033[1;32;49m=== Overwrite those files?\033[0m" stepInitDotfiles
 
 if [[ -e "$HOME/.vim" ]] && [[ ! -e "$HOME/.config/nvim" ]]; then
     ln -sf $HOME/.vim $HOME/.config/nvim
@@ -93,13 +104,13 @@ if [[ ! -d "$HOME/.fonts" ]]; then
     mkdir "$HOME/.fonts"
 fi
 
-printf "\033[1;32;49m=== Type Y/y to install zsh, python and powerline: \033[0m"
-read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+stepInstallStuff () {
     if uname -a | grep -iq linux > /dev/null && grep -iq debian /etc/*release* > /dev/null; then
         echo 'Installing stuff ...'
         sudo apt update
         sudo apt -y install aptitude python3 git zsh curl wget python3-venv python3-pip
         sudo apt -y install debhelper autotools-dev dh-autoreconf file libncurses5-dev libevent-dev pkg-config libutempter-dev build-essential
+        sudo apt -y install sqlite3
         printf "\033[1;32;49m=== Type Y/y to install powerline: \033[0m"
         read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
             echo 'Installing powerline'
@@ -146,32 +157,39 @@ read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
             find /usr/local -iregex '.*tmux/powerline.conf' 2> /dev/null -print0 | xargs -0 -I % ln -sfv % $HOME/.powerline-tmux.conf
         fi
     fi
-fi
+}
+confirmYn "\033[1;32;49m=== Install zsh, python and powerline:\033[0m" stepInstallStuff
 
-echo $PWD
+#echo $PWD
 
-printf "\033[1;32;49m=== Type Y/y to install/update fzf: \033[0m"
-read -n 1 c; echo ''
-if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
+stepInstallFzf () {
     if [[ ! -d "$HOME/.fzf" ]]; then
         git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     else
         (cd ~/.fzf; git pull origin master)
     fi
     ~/.fzf/install --all --no-update-rc
-fi
+}
+confirmYn "\033[1;32;49m=== Install/update fzf:\033[0m" stepInstallFzf
 
-while [[ x${git_global_name} == 'x' ]]; do
-    read -rp "gitconfig global name: " git_global_name
-done
-while [[ x${git_global_email} == 'x' ]]; do
-    read -rp "gitconfig global email: " git_global_email
-done
 
-cat <<EOF > $HOME/.gitconfigp
+stepConfigGitName () {
+    while [[ x${git_global_name} == 'x' ]]; do
+        read -rp "gitconfig global name: " git_global_name
+    done
+    while [[ x${git_global_email} == 'x' ]]; do
+        read -rp "gitconfig global email: " git_global_email
+    done
+    cat <<EOF > $HOME/.gitconfigp
 [user]
 	name = ${git_global_name}
 	email = ${git_global_email}
 [core]
 	excludesfile = $HOME/.gitignore
 EOF
+}
+if [ -f $HOME/.gitconfigp ]; then
+    confirmYn "\033[1;32;49m=== Config local git name/email:\033[0m" stepConfigGitName
+else
+    stepConfigGitName
+fi

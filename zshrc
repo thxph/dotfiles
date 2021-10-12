@@ -44,6 +44,10 @@ elif uname | grep Linux >> /dev/null; then
     plugins+=(copydir copybuffer)
 fi
 
+if [ -f $HOME/.zshrc-tlocal ]; then
+    source $HOME/.zshrc-tlocal
+fi
+
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
