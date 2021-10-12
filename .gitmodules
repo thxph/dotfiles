@@ -12,4 +12,4 @@
 	url = https://github.com/larkery/zsh-histdb
 [submodule "oh-my-zsh-custom/custom/plugins/zsh-histdb-fzf"]
 	path = oh-my-zsh-custom/custom/plugins/zsh-histdb-fzf
-	url = https://github.com/m42e/zsh-histdb-fzf
+	url = git@github.com:thxph/zsh-histdb-fzf.git
