@@ -9,7 +9,9 @@ fi
 if [[ -d $HOME/.jenv/bin ]]; then
     path_prepend=( $HOME/.jenv/shims $path_prepend )
     path_append=( $path_append $HOME/.jenv/bin )
-    eval "$($HOME/.jenv/bin/jenv init -)"
+    path=( $path_prepend $path $path_append )
+    typeset -U path
+    eval "$(jenv init -)"
 fi
 
 function load-nvm() {
