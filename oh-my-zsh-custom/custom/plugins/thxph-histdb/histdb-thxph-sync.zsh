@@ -39,3 +39,6 @@ delete from history where id not in (select min(id) from history group by comman
 delete from sync.history where id not in (select min(id) from sync.history group by command_id,place_id,exit_status);
 
 EOF
+
+echo 'vacuum;' | sqlite3 $histdb_file_local
+echo 'vacuum;' | sqlite3 $histdb_file_synced
