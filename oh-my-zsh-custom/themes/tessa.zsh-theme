@@ -19,14 +19,16 @@ function box_name {
 }
 
 [[ -f /proc/apm ]] && p_apm="%(2v.-%2v-.)"
-p_shlvlhist="%{$fg[white]%}zsh%(2L./$SHLVL.) %B%h%b "
+p_shlvl="%{$fg[white]%}%(2L.$SHLVL/.)"
 p_rc="%{$fg[white]%}[%?%1v] "
 p_end="%{$fg[white]%}%B%#%b"
 
-PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}$(box_name)%{$reset_color%} in %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)
-$p_shlvlhist$p_rc$p_apm$p_end%{$reset_color%} '
+ptime='[%D{%T}]'
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}"
+PROMPT='$p_shlvl%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}$(box_name)%{$reset_color%}:%{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info) $ptime
+$p_rc$p_apm$p_end%{$reset_color%} '
+
+ZSH_THEME_GIT_PROMPT_PREFIX="|%{$fg[magenta]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[green]%}!"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
@@ -38,5 +40,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 #RPROMPT='%D{%H:%M:%S}'
 
-#TMOUT=1
+TMOUT=1
+TRAPALRM() {
+  zle reset-prompt
+}
 

@@ -6,8 +6,8 @@ fi
 source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
 autoload -Uz add-zsh-hook
 
-source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb-fzf/fzf-histdb.zsh
-
 export HISTDB_FZF_DEFAULT_MODE=4
+source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb-fzf/fzf-histdb.zsh
 bindkey '^R' histdb-fzf-widget
+
 

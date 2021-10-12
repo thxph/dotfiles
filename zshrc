@@ -37,6 +37,7 @@ plugins=(
     git \
     vi-mode \
     zsh-syntax-highlighting \
+    thxph-fzf \
     thanh)
 if uname | grep Darwin >> /dev/null; then
     plugins+=(osx)

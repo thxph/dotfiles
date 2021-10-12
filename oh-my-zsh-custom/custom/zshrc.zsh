@@ -83,7 +83,6 @@ setopt NO_xtrace
 bindkey '' backward-delete-char
 bindkey '^h' backward-delete-char
 bindkey '^w' backward-kill-word
-bindkey '^r' history-incremental-search-backward
 export KEYTIMEOUT=1
 
 
@@ -136,19 +135,5 @@ if uname | grep Darwin >> /dev/null; then
 
     manpath=(/opt/local/man /usr/local/man $manpath)
     cdpath=($cdpath ~/Documents)
-
-    export HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
 fi
-
-if which fzf > /dev/null; then
-    alias fzfp='fzf --preview '"'"'[[ $(file --mime {}) =~ binary ]] &&
-        echo {} is a binary file ||
-        (highlight -O ansi -l {} ||
-        coderay {} ||
-        rougify {} ||
-        cat {}) 2> /dev/null | head -500'"'"
-fi
-
-export FZF_COMPLETION_TRIGGER=',,'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
