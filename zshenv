@@ -85,4 +85,6 @@ export path_append
 # use nvim
 export VISUAL=`which nvim`
 
-. "$HOME/.cargo/env"
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi
