@@ -23,9 +23,9 @@ p_shlvl="%{$fg[white]%}%(2L.$SHLVL/.)"
 p_rc="%{$fg[white]%}[%?%1v] "
 p_end="%{$fg[white]%}%B%#%b"
 
-ptime='[%D{%T}]'
+#ptime='[%D{%T}]'
 
-PROMPT='$p_shlvl%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}$(box_name)%{$reset_color%}:%{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info) $ptime
+PROMPT='$p_shlvl%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}$(box_name)%{$reset_color%}:%{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)
 $p_rc$p_apm$p_end%{$reset_color%} '
 
 ZSH_THEME_GIT_PROMPT_PREFIX="|%{$fg[magenta]%}"
@@ -40,8 +40,10 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 #RPROMPT='%D{%H:%M:%S}'
 
-TMOUT=1
-TRAPALRM() {
-  zle reset-prompt
-}
+# this messes with other zle stuff
+#TMOUT=1
+#TRAPALRM() {
+#  #echo $PROMPT
+#  zle reset-prompt
+#}
 
