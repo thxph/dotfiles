@@ -142,6 +142,12 @@ stepInstallStuff () {
             pip3 install --user neovim
             nvim +PlugInstall +qa
         fi
+    elif uname -a | grep -iq linux > /dev/null && grep -iq manjaro /etc/*release* > /dev/null; then
+        echo 'Installing stuff...'
+        #pamac checkupdates || true
+        #pamac update --no-confirm
+        pamac install sqlite3 neovim tmux
+        nvim +PlugInstall +qa
     elif uname -a | grep -iq darwin > /dev/null; then
         if [ -f /usr/local/bin/brew ]; then
             brew install python curl neovim wget python3 tmux zsh git reattach-to-user-namespace highlight tree
