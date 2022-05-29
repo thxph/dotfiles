@@ -86,9 +86,9 @@ INSERT INTO thxph_sync_status(sync_ts,local_cmd_id,remote_cmd_id,local_plc_id,re
                select sync_ts,local_cmd_id,remote_cmd_id,local_plc_id,remote_plc_id,local_hist_id,remote_hist_id from thxph_sync_status where id = 1;
 update thxph_sync_status set sync_ts=STRFTIME('%s') order by id desc limit 1;
 
-delete from history where id not in (select min(id) from history group by command_id,place_id,exit_status);
+delete from history where id not in (select max(id) from history group by command_id,place_id,exit_status);
 select 'Deleted ' || changes() || ' duplicated entries from local history';
-delete from sync.history where id not in (select min(id) from sync.history group by command_id,place_id,exit_status);
+delete from sync.history where id not in (select max(id) from sync.history group by command_id,place_id,exit_status);
 select 'Deleted ' || changes() || ' duplicated entries from remote history';
 
 end;
