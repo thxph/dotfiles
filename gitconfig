@@ -4,3 +4,5 @@
 	default = simple
 [url "git@bitbucket.org:"]
 	insteadOf = https://bitbucket.org/
+[core]
+	eol = lf
