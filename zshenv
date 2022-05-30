@@ -14,6 +14,10 @@ if [[ -d $HOME/.jenv/bin ]]; then
     eval "$(jenv init -)"
 fi
 
+if [[ -d $HOME/.local/bin ]]; then
+    path=( $path $HOME/.local/bin )
+fi
+
 function load-nvm() {
     export NVM_DIR="$HOME/.config/nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

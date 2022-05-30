@@ -114,9 +114,9 @@ stepInstallStuff () {
         printf "\033[1;32;49m=== Type Y/y to install powerline: \033[0m"
         read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
             echo 'Installing powerline'
-            sudo pip3 install --system wheel
-            sudo pip3 install --system powerline-status
-            ln -sfv /usr/local/lib/python$(python3 --version | sed 's/.*\(3\..\).*/\1/')/dist-packages/powerline/bindings/tmux/powerline.conf $HOME/.powerline-tmux.conf
+            pip3 install --user wheel
+            pip3 install --user powerline-status
+            ln -sfv ${HOME}/.local/lib/python$(python3 --version | sed 's/.*\(3\..\).*/\1/')/site-packages/powerline/bindings/tmux/powerline.conf $HOME/.powerline-tmux.conf
             printf "\033[1;32;49m=== Type Y/y to install powerline patched fonts: \033[0m"
             read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
                 sudo apt install -y fontconfig
