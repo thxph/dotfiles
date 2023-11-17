@@ -108,15 +108,17 @@ stepInstallStuff () {
     if uname -a | grep -iq linux > /dev/null && grep -iq debian /etc/*release* > /dev/null; then
         echo 'Installing stuff ...'
         sudo apt update
-        sudo apt -y install aptitude python3 git zsh curl wget python3-venv python3-pip
+        sudo apt -y install aptitude python3 python3-dev git zsh curl wget python3-venv python3-pip
         sudo apt -y install debhelper autotools-dev dh-autoreconf file libncurses5-dev libevent-dev pkg-config libutempter-dev build-essential
-        sudo apt -y install sqlite3
+        sudo apt -y install sqlite3 pipx
         printf "\033[1;32;49m=== Type Y/y to install powerline: \033[0m"
         read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
             echo 'Installing powerline'
-            pip3 install --user wheel
-            pip3 install --user powerline-status
-            ln -sfv ${HOME}/.local/lib/python$(python3 --version | sed 's/.*\(3\..\).*/\1/')/site-packages/powerline/bindings/tmux/powerline.conf $HOME/.powerline-tmux.conf
+            mkdir -p ~/.tmux/plugins/tpm
+            git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+            ln -sfv $here/tmux/tmux.conf $HOME/.tmux.conf
+            ln -sfv $here/tmux/tmux-powerline $HOME/.config/tmux-powerline
+            cp $here/tmux/tmux-powerline/config.sh.sample $here/tmux/tmux-powerline/config.sh
             printf "\033[1;32;49m=== Type Y/y to install powerline patched fonts: \033[0m"
             read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
                 sudo apt install -y fontconfig
@@ -137,9 +139,8 @@ stepInstallStuff () {
         read -n 1 c; echo ''; if [[ $c == 'Y' ]] || [[ $c == 'y' ]]; then
             sudo apt update
             sudo apt -y install neovim
-            sudo apt -y install python3-dev python3-pip
             sudo apt -y install highlight tree
-            pip3 install --user neovim
+            pipx install neovim
             nvim +PlugInstall +qa
         fi
     elif uname -a | grep -iq linux > /dev/null && grep -iq manjaro /etc/*release* > /dev/null; then
@@ -151,9 +152,9 @@ stepInstallStuff () {
     elif uname -a | grep -iq darwin > /dev/null; then
         if [ -f /usr/local/bin/brew ]; then
             brew install python curl neovim wget python3 tmux zsh git reattach-to-user-namespace highlight tree
-            pip3 install git+git://github.com/powerline/powerline
-            pip3 install psutil
-            pip3 install neovim
+            pipx install git+git://github.com/powerline/powerline
+            pipx install psutil
+            pipx install neovim
             if grep -iq '/usr/local/bin/zsh' /etc/shells; then
                 printf "    \033[1;34;49m /usr/local/bin/zsh is already in /etc/shells\033[0m\n"
             else
