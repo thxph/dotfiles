@@ -42,7 +42,7 @@ plugins=(
 if uname | grep Darwin >> /dev/null; then
     plugins+=(osx)
 elif uname | grep Linux >> /dev/null; then
-    plugins+=(copydir copybuffer)
+    plugins+=(copypath copyfile copybuffer)
 fi
 
 if [ -f $HOME/.zshrc-tlocal ]; then
