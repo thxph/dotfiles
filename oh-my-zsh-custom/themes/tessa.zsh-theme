@@ -25,7 +25,12 @@ p_end="%{$fg[white]%}%B%#%b"
 
 #ptime='[%D{%T}]'
 
-PROMPT='$p_shlvl%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}$(box_name)%{$reset_color%}:%{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)
+function git_rev_info {
+    git_rev=$(git_prompt_short_sha)
+    [ -z $git_rev ] && echo '' || echo %{$reset_color%}:%{$fg[blue]%}$git_rev
+}
+
+PROMPT='$p_shlvl%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}$(box_name)%{$reset_color%}:%{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)$(git_rev_info)
 $p_rc$p_apm$p_end%{$reset_color%} '
 
 ZSH_THEME_GIT_PROMPT_PREFIX="|%{$fg[magenta]%}"
