@@ -63,6 +63,10 @@ if [ -d "$HOME/.asdf" ]; then
     path_append=( $path_append ${ASDF_DATA_DIR:-$HOME/.asdf}/shims )
 fi
 
+if [ -d "$HOME/fvm/bin" ]; then
+    path_append=( $path_append $HOME/fvm/bin )
+fi
+
 export GOPATH=$HOME/go
 path=( $path_prepend $path $path_append $HOME/go/bin $HOME/.local/bin $HOME/wip/bin $HOME/bin . )
 typeset -U path

@@ -63,6 +63,7 @@ This is a comprehensive dotfiles repository for Unix-like systems (Linux and mac
 
 ### Directory Structure
 - Root level: Primary dotfiles (direct symlinks to `~/.*`)
+- `claude/`: Claude Code files (excluded from auto-symlink; `statusline.sh` is symlinked into `~/.claude/` and `statusLine` merged into `~/.claude/settings.json` by a dedicated setup step)
 - `config/`: XDG config directory files (symlinked to `~/.config/`)
 - `bin/`: User scripts and binaries (symlinked to `~/bin/`)
 - `oh-my-zsh/`: Git submodule of Oh-My-Zsh framework
