@@ -178,7 +178,10 @@ IFS=';' read -r lr lg lb <<< "$level_light"
 # --- build the gradient (dark -> light) context bar ---
 bar=""
 if [ -n "$used_int" ]; then
-  filled=$(( used_int * BAR_WIDTH / 100 ))
+  # ceiling division: each started 10% bucket lights one more bar
+  # (1-10% -> 1, 11-20% -> 2, ..., 91-100% -> 10; 0% -> 0).
+  filled=$(( (used_int * BAR_WIDTH + 99) / 100 ))
+  [ "$filled" -gt "$BAR_WIDTH" ] && filled="$BAR_WIDTH"
 else
   filled=0
 fi
@@ -229,13 +232,13 @@ elif [ -n "$week_part" ]; then
   rate_seg="$week_part"
 fi
 
-# --- cache usage (read/write/hit-rate/total cached size) ---
+# --- cache usage (glyph + hit-rate + total cached size) ---
 cache_seg=""
 total_cache=$((cache_read_tokens + cache_write_tokens))
 total_tokens=$((total_cache + cur_input_tokens))
 if [ "$total_tokens" -gt 0 ]; then
   hit_pct=$(awk -v r="$cache_read_tokens" -v t="$total_tokens" 'BEGIN{printf "%.0f", (r/t)*100}')
-  cache_seg="${ORANGE}Cache${RESET} ${DIMGRAY}R:${RESET}$(fmt_tokens "$cache_read_tokens") ${DIMGRAY}W:${RESET}$(fmt_tokens "$cache_write_tokens") ${DIMGRAY}H:${RESET}${hit_pct}% ${DIMGRAY}Sz:${RESET}$(fmt_tokens "$total_cache")"
+  cache_seg="${ORANGE}⚡${RESET}${hit_pct}% $(fmt_tokens "$total_cache")"
 fi
 
 # --- extended thinking indicator ---
