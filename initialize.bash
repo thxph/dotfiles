@@ -10,7 +10,7 @@ here="$(cd "$here"; pwd)"
 mkln () {
     for file in "$here"/"$1"*; do
         name="$(basename "$file")"
-        if [[ !( " bin claude config initialize.bash oh-my-zsh-custom readme.md " =~ " $name " ) ]]; then
+        if [[ !( " bin config initialize.bash oh-my-zsh-custom readme.md " =~ " $name " ) ]]; then
             if [[ $2 == 't' ]]; then
                 if [[ -e "$HOME/.$1$name" ]]; then
                     rm -rv "$HOME/.$1$name"
@@ -179,28 +179,6 @@ stepInstallFzf () {
 }
 confirmYn "\033[1;32;49m=== Install/update fzf:\033[0m" stepInstallFzf
 
-
-stepInitClaude () {
-    mkdir -p "$HOME/.claude"
-    if [[ `uname` == 'Linux' ]]; then
-        ln -sfv "$here/claude/statusline.sh" "$HOME/.claude/statusline.sh"
-    elif [[ `uname` == 'Darwin' ]]; then
-        ln -sfhv "$here/claude/statusline.sh" "$HOME/.claude/statusline.sh"
-    fi
-    settings="$HOME/.claude/settings.json"
-    if [[ ! -f "$settings" ]]; then
-        echo '{}' > "$settings"
-    fi
-    if which jq > /dev/null; then
-        tmp="$(mktemp)"
-        jq '.statusLine = {"type": "command", "command": "bash \"$HOME/.claude/statusline.sh\""}' "$settings" > "$tmp" && mv "$tmp" "$settings"
-        echo "  statusLine configured in $settings"
-    else
-        printf "    \033[1;34;49m jq not found; add to $settings manually:\n\033[0m"
-        printf '    "statusLine": {"type": "command", "command": "bash \\"$HOME/.claude/statusline.sh\\""}\n'
-    fi
-}
-confirmYn "\033[1;32;49m=== Set up Claude Code status line:\033[0m" stepInitClaude
 
 stepConfigGitName () {
     while [[ x${git_global_name} == 'x' ]]; do
